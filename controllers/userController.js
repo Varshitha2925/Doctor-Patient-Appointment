@@ -87,7 +87,6 @@ const applyDoctor = async (req, res) => {
   try {
     const newDoctor = await doctorModel({ ...req.body, status: "pending" });
     await newDoctor.save();
-    const adminUser = await User.findOne({ isAdmin: true });
     res.status(201).send({
       success: true,
       message: "Doctor Account Applied Successfully",
@@ -107,9 +106,9 @@ const applyDoctor = async (req, res) => {
 const getAllDocotrs = async (req, res) => {
   console.log("req.query", req.query);
   try {
-    specialization = req.query.specialization.split(",");
-    experience = req.query.experience;
-    sort = req.query.sort;
+    let specialization = req.query.specialization.split(",");
+    let experience = req.query.experience;
+    let sort = req.query.sort;
     if (sort == "asc") {
       sort = 1;
     } else {
@@ -117,11 +116,6 @@ const getAllDocotrs = async (req, res) => {
     }
     const doctors = await doctorModel
       .find({})
-      // .where.or([
-      //   { specialization: [...specialization] },
-      //   { experience: experience },
-      // ])
-      // .sort({ feesPerCunsaltation: sort });
       .where("specialization")
       .in([...specialization])
       .where("experience")
@@ -175,7 +169,6 @@ const bookeAppointmnet = async (req, res) => {
         message: "Appointments not Availibale at this time",
         success: true,
       });
-      console.log("Appointment not available");
     }
 
     await newAppointment.save();
@@ -197,7 +190,6 @@ const bookeAppointmnet = async (req, res) => {
 // booking bookingAvailabilityController
 const bookingAvailability = async (req, res) => {
   try {
-    // const date = moment(req.body.date, "DD-MM-YY").toISOString();
     const fromTime = moment(req.body.time, "HH:mm")
       .subtract(1, "hours")
       .toISOString();
