@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const doctorModel = require("../models/doctorModel");
 const appointmentModel = require("../models/appointmentModel");
 const moment = require("moment");
+const logger = require("../controllers/logger");
 
 //@desc Register a User
 //@routw POST /api/users/register
@@ -64,8 +65,10 @@ const loginUser = asyncHandler(async (req, res) => {
       { expiresIn: "10h" }
     );
     res.status(200).json({ accessToken });
+    logger.customerLogger.log("info", "Successfully logged in");
   } else {
     res.status(401);
+    logger.customerLogger.log("error", "Error in logging user");
     throw new Error("email or password is not valid");
   }
   //   res.json({ message: "Login user" });
