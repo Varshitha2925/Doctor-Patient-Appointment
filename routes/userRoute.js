@@ -14,6 +14,7 @@ const {
   bookeAppointmnet,
   bookingAvailability,
   userAppointments,
+  downloadMedication,
 } = require("../controllers/userController");
 
 //router onject
@@ -43,5 +44,8 @@ router.get("/user-appointments", validateToken, userAppointments);
 
 //Check Availability
 router.get("/checkAvailability", validateToken, bookingAvailability);
+
+//Medication Download
+router.get("/medicationDownload", validateToken, downloadMedication);
 
 module.exports = router;

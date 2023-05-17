@@ -7,6 +7,9 @@ const appointmentModel = require("../models/appointmentModel");
 const moment = require("moment");
 const logger = require("../controllers/logger");
 
+const fs = require("fs");
+const PDFDocument = require("pdfkit");
+
 //@desc Register a User
 //@routw POST /api/users/register
 //@access public
@@ -256,7 +259,73 @@ const userAppointments = async (req, res) => {
     });
   }
 };
+//generating PDF for medication
+const downloadMedication = async (req, res) => {
+  try {
+    const appointmentId = req.body.appointmentId;
+    const appointments = await appointmentModel.find({ appointmentId });
+    console.log(appointments);
+    const medicationData = appointments[0].medication;
+    console.log(medicationData);
 
+    const doc = new PDFDocument();
+    const doctorInfo = {
+      name: appointments[0].doctorInfo,
+      id: appointments[0].doctorId,
+    };
+
+    const patientInfo = {
+      name: appointments[0].userInfo,
+      id: appointments[0].userId,
+    };
+    // 644a376f95429b7b4b4348e5
+
+    // Set positions for doctor and patient information
+    const doctorX = 350;
+    const doctorY = 50;
+    const patientX = 50;
+    const patientY = 50;
+
+    // Write doctor information
+    doc.text("Doctor Information:", doctorX, doctorY);
+    doc.text(`Name: ${doctorInfo.name}`, doctorX, doctorY + 20);
+    doc.text(`Id: ${doctorInfo.id}`, doctorX, doctorY + 40);
+
+    // Write patient information
+    doc.text("Patient Information:", patientX, patientY);
+    doc.text(`Name: ${patientInfo.name}`, patientX, patientY + 20);
+    doc.text(`Id: ${patientInfo.id}`, patientX, patientY + 40);
+
+    doc.moveDown();
+
+    medicationData.forEach((element) => {
+      doc.text(`${element.medicineName} : ${element.Time}`, {
+        align: "center",
+      });
+    });
+
+    // Generate a unique filename
+    const fileName = `output-${Date.now()}.pdf`;
+
+    // Save the PDF to the file system
+    const filePath = `./pdfs/${fileName}`;
+    doc.pipe(fs.createWriteStream(filePath));
+    doc.end();
+
+    res.status(200).send({
+      success: true,
+      message: "PDF file has been generated and saved successfully",
+      data: filePath,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error In Generating PDF",
+    });
+  }
+};
 module.exports = {
   registerUser,
   loginUser,
@@ -266,4 +335,5 @@ module.exports = {
   bookeAppointmnet,
   userAppointments,
   bookingAvailability,
+  downloadMedication,
 };
