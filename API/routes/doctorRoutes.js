@@ -6,6 +6,7 @@ const {
   updateStatusController,
   multipleCommentsController,
   totalFeeCalculator,
+  postMedication,
 } = require("../controllers/doctorController");
 const validateToken = require("../middlewares/validateTokenHandler");
 const router = express.Router();
@@ -27,5 +28,8 @@ router.post("/update-comments", validateToken, multipleCommentsController);
 
 //GET total fee
 router.get("/totalFee", validateToken, totalFeeCalculator);
+
+//POST medication
+router.post("/postMedication", validateToken, postMedication);
 
 module.exports = router;

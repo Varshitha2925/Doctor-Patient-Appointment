@@ -42,6 +42,9 @@ const appointmentSchema = new mongoose.Schema(
       type: Array,
       required: true,
     },
+    medication: {
+      type: Array,
+    },
     comments: {
       type: Array,
     },

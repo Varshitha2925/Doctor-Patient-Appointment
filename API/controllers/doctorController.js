@@ -163,6 +163,33 @@ const totalFeeCalculator = async (req, res) => {
   }
 };
 
+const postMedication = async (req, res) => {
+  try {
+    const { appointmentId, medication } = req.body;
+    const appointments = await appointmentModel.findByIdAndUpdate(
+      appointmentId,
+      { medication }
+    );
+    console.log(appointments);
+    appointments.medication.push(medication);
+    await appointments.save();
+
+    res.status(200).send({
+      success: true,
+      message: "Medication Posted Sucessfully",
+      data: appointments.medication,
+    });
+    // 644a376f95429b7b4b4348e5
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error in posting medication",
+    });
+  }
+};
+
 module.exports = {
   getDoctorInfoController,
   updateProfileController,
@@ -170,4 +197,5 @@ module.exports = {
   updateStatusController,
   multipleCommentsController,
   totalFeeCalculator,
+  postMedication,
 };
