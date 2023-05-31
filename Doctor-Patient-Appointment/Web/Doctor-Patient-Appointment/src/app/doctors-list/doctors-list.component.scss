@@ -1,0 +1,58 @@
+.doctorsList{
+    padding:5px;
+}
+
+
+.filter-bar{
+    width:80%;
+    // border: 2px solid red;
+    padding: 5px;
+    align-content: center;
+    margin: auto;
+    border-radius: 10px;
+    margin-top: 20px;
+
+    .title{
+        padding: 8px;
+        font-weight: 500;
+        font-size: 30px;
+    }
+    .filter{
+         display: flex;
+         justify-content: space-between;
+         color:#1ea18b;
+        .doctorName{
+            width: 300px;
+            border-radius: 12px;
+            height: 41px;
+            padding: 5px;
+            border:2px solid #1ea18b;
+        }
+        .speciality{
+            width: 300px;
+            border-radius: 12px;
+            height: 41px;
+            padding: 5px;
+            border:2px solid #1ea18b;
+            color: #1ea18b;
+        }
+        .filter-button{
+            width: 200px;
+            border-radius: 12px;
+            height: 45px;
+            padding: 5px;
+            background-color: #1ea18b;
+            color: white;
+        }
+    }
+}
+.list-of-doctor-cards{
+    width: 200px;
+    .doctor-card{
+        border: 2px solid #d5d5d5;
+        padding:5px;
+        .doctorTitle{
+            border-bottom: 2px solid #d5d5d5;
+        }
+    }
+}

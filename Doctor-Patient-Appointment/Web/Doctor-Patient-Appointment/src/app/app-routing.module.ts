@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { PatientDashboardComponent } from './patient-dashboard/patient-dashboard.component';
 import { LayoutComponent } from './layout/layout.component';
+import { DoctorsListComponent } from './doctors-list/doctors-list.component';
 
 const routes: Routes = [
 
@@ -23,7 +24,7 @@ const routes: Routes = [
 
   {
     path: '',
-    component: PatientDashboardComponent
+    component: DoctorsListComponent
   }
 
 ];

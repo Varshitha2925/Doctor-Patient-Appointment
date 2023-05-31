@@ -1,1 +1,29 @@
-<p>doctors-list works!</p>
+<div class="doctorsList">
+    <mat-card class="filter-bar">
+        <mat-card-title class="title">
+            Find A Doctor
+        </mat-card-title>
+        <mat-card-content class="filter">
+            <input placeholder="Doctor" class="doctorName">
+            <input placeholder="Speciality" class="speciality">
+            <button mat-raised-button type="submit" class="filter-button">Filter</button>
+        </mat-card-content>
+    </mat-card>
+    <br>
+    <div class="list-of-doctor-cards" *ngFor="let doctor of list">
+        <mat-card class="doctor-card">
+            <mat-card-title class="doctorTitle">
+                {{doctor.doctor}}
+            </mat-card-title>
+            <mat-card-content>
+                <div>
+                    Specialization : {{doctor.specialization}}</div>
+                <div>
+                    Experience : {{doctor.experience}}</div>
+                <div>
+                    Fees : {{doctor.feesperConsultation}}</div>
+            </mat-card-content>
+        </mat-card>
+
+    </div>
+</div>

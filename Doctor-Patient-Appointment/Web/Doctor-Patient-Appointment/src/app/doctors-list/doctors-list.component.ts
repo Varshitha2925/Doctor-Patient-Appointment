@@ -6,5 +6,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./doctors-list.component.scss']
 })
 export class DoctorsListComponent {
+  list:any
+  constructor(){
+    this.list = [{
+      doctor : "Jack",
+      specialization : "Cardio",
+      experience: "5 years",
+      feesperConsultation: "1000"
+    }]
+  }
 
 }
