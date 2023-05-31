@@ -21,6 +21,7 @@ import { PatientDashboardComponent } from './patient-dashboard/patient-dashboard
 import { AppHeaderComponent } from './shared/app-header/app-header.component';
 import { AppNavbarComponent } from './shared/app-navbar/app-navbar.component';
 import { LayoutComponent } from './layout/layout.component';
+import { DoctorsListComponent } from './doctors-list/doctors-list.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import { LayoutComponent } from './layout/layout.component';
     AppHeaderComponent,
     AppNavbarComponent,
     LayoutComponent,
+    DoctorsListComponent,
   ],
   imports: [
     BrowserModule,
