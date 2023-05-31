@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,12 +16,20 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {  MatTableModule } from '@angular/material/table';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import {Router} from '@angular/router'
+import {Router} from '@angular/router';
+import { PatientDashboardComponent } from './patient-dashboard/patient-dashboard.component';
+import { AppHeaderComponent } from './shared/app-header/app-header.component';
+import { AppNavbarComponent } from './shared/app-navbar/app-navbar.component';
+import { LayoutComponent } from './shared/layout/layout.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    PatientDashboardComponent,
+    AppHeaderComponent,
+    AppNavbarComponent,
+    LayoutComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,6 +43,10 @@ import {Router} from '@angular/router'
     MatFormFieldModule,
     MatTableModule,
     MatToolbarModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

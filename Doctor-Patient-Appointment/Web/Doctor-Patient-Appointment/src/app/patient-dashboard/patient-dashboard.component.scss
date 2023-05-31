@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300&display=swap');
+
+.Dashboard{
+    width: 98%;
+    margin:auto;
+    align-content: center;
+    border: 2px solid red;
+}
+.header{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    align-items: center;
+    height: 10%;
+    padding-top: 16px;
+    .buttons{
+        display: flex;
+        .create-Appointment{
+            background-color: brown;
+            color: whitesmoke;
+        }
+    }
+}
+
+i{
+    padding : 3%;
+    color: #80818B;
+}
+.filter-bar{
+
+}
+.content{
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    .list{
+        width: 800px;
+    }
+}
