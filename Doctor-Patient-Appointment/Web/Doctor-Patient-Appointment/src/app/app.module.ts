@@ -20,7 +20,7 @@ import {Router} from '@angular/router';
 import { PatientDashboardComponent } from './patient-dashboard/patient-dashboard.component';
 import { AppHeaderComponent } from './shared/app-header/app-header.component';
 import { AppNavbarComponent } from './shared/app-navbar/app-navbar.component';
-import { LayoutComponent } from './shared/layout/layout.component';
+import { LayoutComponent } from './layout/layout.component';
 
 @NgModule({
   declarations: [

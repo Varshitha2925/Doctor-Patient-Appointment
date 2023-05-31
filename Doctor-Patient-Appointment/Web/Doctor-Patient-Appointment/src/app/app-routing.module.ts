@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { PatientDashboardComponent } from './patient-dashboard/patient-dashboard.component';
-import { LayoutComponent } from './shared/layout/layout.component';
+import { LayoutComponent } from './layout/layout.component';
 
 const routes: Routes = [
 
@@ -12,14 +12,19 @@ const routes: Routes = [
   //   pathMatch: 'full'
   // },
 
+  // {
+  //   path: '',
+  //   component: LayoutComponent,
+  //   children: [{
+  //     path: 'patient',
+  //     loadChildren: () => import('./patient-dashboard/patient-dashboard.component').then(() => PatientDashboardComponent),
+  //   }]
+  // }, 
+
   {
     path: '',
-    component: LayoutComponent,
-    children: [{
-      path: 'patient',
-      loadChildren: () => import('./patient-dashboard/patient-dashboard.component').then(() => PatientDashboardComponent),
-    }]
-  }, 
+    component: PatientDashboardComponent
+  }
 
 ];
 
