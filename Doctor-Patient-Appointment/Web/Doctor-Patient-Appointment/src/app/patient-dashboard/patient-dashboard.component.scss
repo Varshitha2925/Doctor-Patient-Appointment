@@ -1,10 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300&display=swap');
 
 .Dashboard{
-    width: 98%;
+    width: 96%;
     margin:auto;
     align-content: center;
-    border: 2px solid red;
 }
 .header{
     display: flex;
@@ -16,7 +15,7 @@
     .buttons{
         display: flex;
         .create-Appointment{
-            background-color: brown;
+            background-color: #1ea18b;
             color: whitesmoke;
         }
     }
