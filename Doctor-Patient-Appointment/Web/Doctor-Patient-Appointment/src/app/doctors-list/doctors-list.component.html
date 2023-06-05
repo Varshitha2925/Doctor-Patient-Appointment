@@ -10,20 +10,22 @@
         </mat-card-content>
     </mat-card>
     <br>
-    <div class="list-of-doctor-cards" *ngFor="let doctor of list">
-        <mat-card class="doctor-card">
-            <mat-card-title class="doctorTitle">
-                {{doctor.doctor}}
-            </mat-card-title>
-            <mat-card-content>
-                <div>
-                    Specialization : {{doctor.specialization}}</div>
-                <div>
-                    Experience : {{doctor.experience}}</div>
-                <div>
-                    Fees : {{doctor.feesperConsultation}}</div>
-            </mat-card-content>
-        </mat-card>
+    <div class="whole">
+        <div class="list-of-doctor-cards" *ngFor="let doctor of list">
+            <mat-card class="doctor-card">
+                <mat-card-title class="doctorTitle">
+                    {{doctor.firstName}}
+                </mat-card-title>
+                <mat-card-content>
+                    <div>
+                        Specialization : {{doctor.specialization}}</div>
+                    <div>
+                        Experience : {{doctor.experience}}</div>
+                    <div>
+                        Fees : {{doctor.feesPerCunsaltation}}</div>
+                </mat-card-content>
+            </mat-card>
 
+        </div>
     </div>
 </div>

@@ -10,7 +10,7 @@ const validateToken = require("../middlewares/validateTokenHandler");
 
 const {
   applyDoctor,
-  getAllDocotrs,
+  getAllDoctors,
   bookeAppointmnet,
   bookingAvailability,
   userAppointments,
@@ -28,24 +28,24 @@ router.post("/login", loginUser);
 router.post("/register", registerUser);
 
 //Auth || POST
-router.get("/currentUser", validateToken, currentUser);
+router.get("/currentUser", currentUser);
 
 //Apply Doctor || POST
-router.post("/apply-doctor", validateToken, applyDoctor);
+router.post("/apply-doctor", applyDoctor);
 
 //GET ALL DOC
-router.get("/getAllDoctors", validateToken, getAllDocotrs);
+router.get("/getAllDoctors", getAllDoctors);
 
 //BOOK APPOINTMENT
-router.post("/book-appointment", validateToken, bookeAppointmnet);
+router.post("/book-appointment", bookeAppointmnet);
 
 //Appointments List
-router.get("/user-appointments", validateToken, userAppointments);
+router.get("/user-appointments", userAppointments);
 
 //Check Availability
-router.get("/checkAvailability", validateToken, bookingAvailability);
+router.get("/checkAvailability", bookingAvailability);
 
 //Medication Download
-router.get("/medicationDownload", validateToken, downloadMedication);
+router.get("/medicationDownload", downloadMedication);
 
 module.exports = router;

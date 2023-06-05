@@ -6,6 +6,7 @@ const doctorModel = require("../models/doctorModel");
 const appointmentModel = require("../models/appointmentModel");
 const moment = require("moment");
 const logger = require("../controllers/logger");
+const mongoose = require("mongoose");
 // const sendEmail = require("./nodeMail");
 
 const nodemailer = require("nodemailer");
@@ -138,28 +139,37 @@ const applyDoctor = async (req, res) => {
 };
 
 //GET ALL DOC
-const getAllDocotrs = async (req, res) => {
-  console.log("req.query", req.query);
+const getAllDoctors = async (req, res) => {
   try {
-    let specialization = req.query.specialization.split(",");
-    let experience = req.query.experience;
-    let sort = req.query.sort;
-    if (sort == "asc") {
-      sort = 1;
+    if (req.query != {}) {
+      this.doctors = await doctorModel.find({});
     } else {
-      sort = -1;
+      let specialization = req.query.specialization;
+      console.log(this.specialization);
+      if (this.specialization != "") {
+        this.specialization = req.query.specialization.split(",");
+      } else {
+        this.specialization = "";
+      }
+      let experience = "";
+      let sort = req.query.sort;
+      if (sort == "asc") {
+        sort = 1;
+      } else {
+        sort = -1;
+      }
+      this.doctors = await doctorModel
+        .find({})
+        .where("specialization")
+        .in([...specialization])
+        .where("experience")
+        .in(experience)
+        .sort({ feesPerCunsaltation: sort });
     }
-    const doctors = await doctorModel
-      .find({})
-      .where("specialization")
-      .in([...specialization])
-      .where("experience")
-      .in(experience)
-      .sort({ feesPerCunsaltation: sort });
     res.status(200).send({
       success: true,
       message: "Doctors Lists Fetched Successfully",
-      data: doctors,
+      data: this.doctors,
     });
   } catch (error) {
     console.log(error);
@@ -170,6 +180,23 @@ const getAllDocotrs = async (req, res) => {
     });
   }
 };
+
+// const getAllDoctors = async (req, res) => {
+//   const filter = {
+//     $or: [
+//       { specialization: req.query.specialization },
+//       { experience: req.query.experience },
+//     ],
+//   };
+//   let doc = mongoose.model("doc", doctorModel);
+//   let doctors = doc.find(filter, (err, docs) => {
+//     if (err) {
+//       console.log("err", err);
+//       return res.status(500).send(err);
+//     }
+//     res.json(docs);
+//   });
+// };
 
 //BOOK APPOINTMENT
 const bookeAppointmnet = async (req, res) => {
@@ -367,7 +394,7 @@ module.exports = {
   loginUser,
   currentUser,
   applyDoctor,
-  getAllDocotrs,
+  getAllDoctors,
   bookeAppointmnet,
   userAppointments,
   bookingAvailability,

@@ -47,12 +47,21 @@
     }
 }
 .list-of-doctor-cards{
-    width: 200px;
+    display:flex;
+    justify-content: space-between;
+    width: max-content;
+    padding: 8px;
     .doctor-card{
-        border: 2px solid #d5d5d5;
-        padding:5px;
+        border: 2px solid #1ea18b;
+        padding:8px;
         .doctorTitle{
+            color: #1ea18b;
             border-bottom: 2px solid #d5d5d5;
         }
     }
+}
+.whole{
+    display:flex;
+    padding: 8px;
+    margin-left: 20px;
 }
