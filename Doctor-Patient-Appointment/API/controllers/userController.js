@@ -151,20 +151,16 @@ const getAllDoctors = async (req, res) => {
       sort = -1;
     }
     if (!req.query.specialization && !req.query.experience) {
-      console.log("Not both");
       doctors = await doctorModel.find({}).sort({ feesPerCunsaltation: sort });
     } else if (!req.query.specialization) {
-      console.log("exp hai");
       doctors = await doctorModel
         .find({ experience: experience })
         .sort({ feesPerCunsaltation: sort });
     } else if (!req.query.experience) {
-      console.log("spec hai");
       doctors = await doctorModel
         .find({ specialization: { $in: specialization } })
         .sort({ feesPerCunsaltation: sort });
     } else {
-      console.log("Both");
       doctors = await doctorModel
         .find({
           $or: [
