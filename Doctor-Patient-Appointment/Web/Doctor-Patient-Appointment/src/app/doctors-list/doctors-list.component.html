@@ -4,8 +4,8 @@
             Find A Doctor
         </mat-card-title>
         <mat-card-content class="filter">
-            <input placeholder="Doctor" class="doctorName">
-            <input placeholder="Speciality" class="speciality">
+            <input placeholder="Doctor" class="doctorName" (input)='search_by_spec($event)'>
+            <input placeholder="Speciality" class="speciality" (input)='search_by_experience($event)'>
             <button mat-raised-button type="submit" class="filter-button">Filter</button>
         </mat-card-content>
     </mat-card>

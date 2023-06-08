@@ -140,36 +140,44 @@ const applyDoctor = async (req, res) => {
 
 //GET ALL DOC
 const getAllDoctors = async (req, res) => {
+  let doctors;
   try {
-    if (req.query != {}) {
-      this.doctors = await doctorModel.find({});
+    let specialization = req.query.specialization;
+    let experience = req.query.experience;
+    let sort = req.query.sort;
+    if (sort == "asc") {
+      sort = 1;
     } else {
-      let specialization = req.query.specialization;
-      console.log(this.specialization);
-      if (this.specialization != "") {
-        this.specialization = req.query.specialization.split(",");
-      } else {
-        this.specialization = "";
-      }
-      let experience = "";
-      let sort = req.query.sort;
-      if (sort == "asc") {
-        sort = 1;
-      } else {
-        sort = -1;
-      }
-      this.doctors = await doctorModel
-        .find({})
-        .where("specialization")
-        .in([...specialization])
-        .where("experience")
-        .in(experience)
+      sort = -1;
+    }
+    if (!req.query.specialization && !req.query.experience) {
+      console.log("Not both");
+      doctors = await doctorModel.find({}).sort({ feesPerCunsaltation: sort });
+    } else if (!req.query.specialization) {
+      console.log("exp hai");
+      doctors = await doctorModel
+        .find({ experience: experience })
+        .sort({ feesPerCunsaltation: sort });
+    } else if (!req.query.experience) {
+      console.log("spec hai");
+      doctors = await doctorModel
+        .find({ specialization: { $in: specialization } })
+        .sort({ feesPerCunsaltation: sort });
+    } else {
+      console.log("Both");
+      doctors = await doctorModel
+        .find({
+          $or: [
+            { specialization: { $in: specialization } },
+            { experience: experience },
+          ],
+        })
         .sort({ feesPerCunsaltation: sort });
     }
     res.status(200).send({
       success: true,
       message: "Doctors Lists Fetched Successfully",
-      data: this.doctors,
+      data: doctors,
     });
   } catch (error) {
     console.log(error);
