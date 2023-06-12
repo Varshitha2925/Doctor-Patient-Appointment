@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -6,14 +6,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class PatientService {
-
+  public appointmentId:any
   constructor(private http: HttpClient) {
   }
-
-  // getAlldoctors():Observable<any>{
-  //   console.log("Hello")
-  //   return this.http.get("http://localhost:3000/api/users/getAllDoctors")
-  // }
 
   getAlldoctors(
     search : {
@@ -28,6 +23,20 @@ export class PatientService {
 
       "http://localhost:3000/api/users/getAllDoctors",{params})
 
+  }
+
+  getUserApoointment():Observable<any>{
+    return this.http.get<any>(
+      "http://localhost:3000/api/users/user-appointments")
+  }
+
+  downloadPrescription(appointmentId:any){
+    this.appointmentId = {
+      "appointmentId": appointmentId
+    }
+    console.log("app",appointmentId)
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post("http://localhost:3000/api/users/medicationDownload",this.appointmentId)
   }
 
 }

@@ -329,6 +329,7 @@ const userAppointments = async (req, res) => {
 //generating PDF for medication
 const downloadMedication = async (req, res) => {
   try {
+    console.log("req", req.body);
     const appointmentId = req.body.appointmentId;
     const appointments = await appointmentModel.find({ appointmentId });
     console.log(appointments);

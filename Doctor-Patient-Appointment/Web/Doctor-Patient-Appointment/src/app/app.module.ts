@@ -22,6 +22,7 @@ import { AppHeaderComponent } from './shared/app-header/app-header.component';
 import { AppNavbarComponent } from './shared/app-navbar/app-navbar.component';
 import { LayoutComponent } from './layout/layout.component';
 import { DoctorsListComponent } from './doctors-list/doctors-list.component';
+import { CreateApppointmentComponent } from './patient-dashboard/create-apppointment/create-apppointment.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { DoctorsListComponent } from './doctors-list/doctors-list.component';
     AppNavbarComponent,
     LayoutComponent,
     DoctorsListComponent,
+    CreateApppointmentComponent,
   ],
   imports: [
     BrowserModule,

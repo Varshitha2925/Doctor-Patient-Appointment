@@ -46,6 +46,6 @@ router.get("/user-appointments", userAppointments);
 router.get("/checkAvailability", bookingAvailability);
 
 //Medication Download
-router.get("/medicationDownload", downloadMedication);
+router.post("/medicationDownload", downloadMedication);
 
 module.exports = router;
