@@ -1,3 +1,4 @@
+const { hash } = require("bcrypt");
 const appointmentModel = require("../models/appointmentModel");
 const doctorModel = require("../models/doctorModel");
 const userModel = require("../models/userModel");
@@ -179,6 +180,7 @@ const postMedication = async (req, res) => {
       message: "Medication Posted Sucessfully",
       data: appointments.medication,
     });
+    
     // 644a376f95429b7b4b4348e5
   } catch (error) {
     console.log(error);
