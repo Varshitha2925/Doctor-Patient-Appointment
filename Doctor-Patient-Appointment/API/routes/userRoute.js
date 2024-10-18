@@ -4,6 +4,7 @@ const {
   registerUser,
   loginUser,
   currentUser,
+  isInsurance,
 } = require("../controllers/userController");
 
 const validateToken = require("../middlewares/validateTokenHandler");
@@ -47,5 +48,9 @@ router.get("/checkAvailability", validateToken, bookingAvailability);
 
 //Medication Download
 router.get("/medicationDownload", validateToken, downloadMedication);
+
+//Insuarance
+router.get("/insurance", validateToken, isInsurance);
+
 
 module.exports = router;

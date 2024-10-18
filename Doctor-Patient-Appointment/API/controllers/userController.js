@@ -6,6 +6,8 @@ const doctorModel = require("../models/doctorModel");
 const appointmentModel = require("../models/appointmentModel");
 const moment = require("moment");
 const logger = require("../controllers/logger");
+const prescriptionModel = require("../models/prescriptionModel");
+const insuranceModel = require("../models/insuranceModel")
 // const sendEmail = require("./nodeMail");
 
 const nodemailer = require("nodemailer");
@@ -41,6 +43,7 @@ const sendEmail = async (toEmail, subject, content) => {
 
 const fs = require("fs");
 const PDFDocument = require("pdfkit");
+const feedbackModel = require("../models/feedbackModel");
 
 //@desc Register a User
 //@routw POST /api/users/register
@@ -139,23 +142,24 @@ const applyDoctor = async (req, res) => {
 
 //GET ALL DOC
 const getAllDocotrs = async (req, res) => {
-  console.log("req.query", req.query);
+  // console.log("req.query", req.query);
   try {
-    let specialization = req.query.specialization.split(",");
-    let experience = req.query.experience;
-    let sort = req.query.sort;
-    if (sort == "asc") {
-      sort = 1;
-    } else {
-      sort = -1;
-    }
+    // let specialization = req.query.specialization.split(",");
+    // let experience = req.query.experience;
+    // let sort = req.query.sort;
+    // if (sort == "asc") {
+    //   sort = 1;
+    // } else {
+    //   sort = -1;
+    // }
     const doctors = await doctorModel
       .find({})
-      .where("specialization")
-      .in([...specialization])
-      .where("experience")
-      .in(experience)
-      .sort({ feesPerCunsaltation: sort });
+      // .where("specialization")
+      // .in([...specialization])
+      // .where("experience")
+      // .in(experience)
+      // .sort({ feesPerCunsaltation: sort });
+    
     res.status(200).send({
       success: true,
       message: "Doctors Lists Fetched Successfully",
@@ -175,7 +179,12 @@ const getAllDocotrs = async (req, res) => {
 const bookeAppointmnet = async (req, res) => {
   try {
     const newAppointment = new appointmentModel(req.body);
+    const newPrescription = new prescriptionModel();
+    newPrescription.appointmentId = newAppointment._id;
+    newPrescription.doctorId = req.body.doctorId;
+    newPrescription.userId = req.body.userId;
     newAppointment.appointmentId = newAppointment._id;
+
     let date = newAppointment.date.split("/");
     date = `${date[2]}-${date[1]}-${date[0]}`;
     let startTime = `${date}T${newAppointment.time[0]}Z`;
@@ -207,10 +216,12 @@ const bookeAppointmnet = async (req, res) => {
     }
 
     await newAppointment.save();
+    await newPrescription.save();
     const toEmail = "varshitha.2925@gmail.com";
     const subject = "Apoointment Confirmation";
     const content = `Hi ${newAppointment.userInfo}\nYour appointment has been successfully booked at ${newAppointment.date} with ${newAppointment.doctorInfo}`;
     await sendEmail(toEmail, subject, content);
+
     res.status(200).send({
       success: true,
       message: "Appointment Book succesfully",
@@ -225,6 +236,25 @@ const bookeAppointmnet = async (req, res) => {
     });
   }
 };
+
+const isInsurance = async(req, res) => {
+  try{
+    const insurance = new insuranceModel(req.body);
+    await insurance.save();
+    res.status(200).send({
+      success: true,
+      message: "Insurance recorded successfully",
+      data: insurance,
+    });
+  } catch (error){
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error in creating Insurance record",
+    });
+  }
+}
 
 // booking bookingAvailabilityController
 const bookingAvailability = async (req, res) => {
@@ -372,4 +402,5 @@ module.exports = {
   userAppointments,
   bookingAvailability,
   downloadMedication,
+  isInsurance
 };

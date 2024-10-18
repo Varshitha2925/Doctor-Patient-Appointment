@@ -1,8 +1,10 @@
 const { hash } = require("bcrypt");
 const appointmentModel = require("../models/appointmentModel");
 const doctorModel = require("../models/doctorModel");
+const feedbackModel = require("../models/feedbackModel");
 const userModel = require("../models/userModel");
 const moment = require("moment");
+const prescriptionModel = require("../models/prescriptionModel");
 
 const getDoctorInfoController = async (req, res) => {
   try {
@@ -167,12 +169,13 @@ const totalFeeCalculator = async (req, res) => {
 const postMedication = async (req, res) => {
   try {
     const { appointmentId, medication } = req.body;
-    const appointments = await appointmentModel.findByIdAndUpdate(
+    const prescription = await prescriptionModel.findByIdAndUpdate(
       appointmentId,
       { medication }
     );
-    console.log(appointments);
-    appointments.medication.push(medication);
+    console.log(prescription);
+    prescripton.medication.push(medication);
+
     await appointments.save();
 
     res.status(200).send({

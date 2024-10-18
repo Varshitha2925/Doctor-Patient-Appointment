@@ -48,6 +48,9 @@ const appointmentSchema = new mongoose.Schema(
     comments: {
       type: Array,
     },
+    insurance: {
+      type: Boolean,
+    }
     
   },
   { timestamps: true }

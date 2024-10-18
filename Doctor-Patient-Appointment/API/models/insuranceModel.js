@@ -11,12 +11,6 @@ const insuranceSchema = mongoose.Schema(
     insuarance_company: {
         type: String,
       },
-    insurance_policy: {
-        type: String,
-    },
-    coverage_details: {
-        type: String,
-    },
     valid_till: {
         type: Date,
     }
