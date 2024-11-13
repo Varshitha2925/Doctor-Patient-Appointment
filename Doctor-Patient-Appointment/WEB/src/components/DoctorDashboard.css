@@ -1,0 +1,27 @@
+.doctor-dashboard {
+    text-align: center;
+  }
+  
+  .dashboard-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .btn-primary, .btn-secondary {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    color: #fff;
+  }
+  
+  .btn-primary {
+    background-color: #2a9d8f;
+    border: none;
+  }
+  
+  .btn-secondary {
+    background-color: #264653;
+    border: none;
+  }
+  
