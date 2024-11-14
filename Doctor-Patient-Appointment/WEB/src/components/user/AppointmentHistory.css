@@ -1,0 +1,21 @@
+.appointment-history button {
+  margin-right: 5px;
+  padding: 6px 10px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.appointment-history button:hover {
+  background-color: #0056b3;
+}
+
+.appointment-history .download-btn {
+  background-color: #28a745;
+}
+
+.appointment-history .download-btn:hover {
+  background-color: #218838;
+}

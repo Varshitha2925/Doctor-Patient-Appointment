@@ -1,0 +1,42 @@
+/* src/components/PatientDashboard.css */
+
+/* Button styling */
+.book-appointment-btn {
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  /* border: 2px solid red; */
+}
+
+.book-appointment-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Table Styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+.patient-dashboard{
+
+  padding: 50px;
+}
