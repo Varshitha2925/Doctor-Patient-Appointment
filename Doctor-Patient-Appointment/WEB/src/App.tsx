@@ -46,7 +46,7 @@
 // src/App.tsx
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import PatientDashboard from './components/user/PatientDashboard';
+import NurseDashboard from './components/NurseDashboard';
 
 const App: React.FC = () => {
   return (
@@ -54,7 +54,7 @@ const App: React.FC = () => {
       <div className="App">
         <h1>Doctor-Patient Appointment</h1>
         <Routes>
-          <Route path="/" element={<PatientDashboard />} />
+          <Route path="/" element={<NurseDashboard />} />
         </Routes>
       </div>
     </Router>

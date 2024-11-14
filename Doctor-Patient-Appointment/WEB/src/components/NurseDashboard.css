@@ -1,0 +1,68 @@
+
+.nurse-dashboard {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+  
+.appointment-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+  
+.appointment-table th,
+.appointment-table td {
+    padding: 12px 15px;
+    text-align: left;
+}
+  
+.appointment-table thead th {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+}
+  
+.appointment-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+  
+.appointment-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+  
+.appointment-table th:first-child,
+.appointment-table td:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+  
+.appointment-table th:last-child,
+.appointment-table td:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+  
+.select-doctor {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+  
+.assign-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+  
+.assign-button:hover {
+    background-color: #0056b3;
+}
+  
