@@ -1,4 +1,5 @@
 // src/components/BookAppointment.tsx
+import axios from 'axios';
 import React, { useState } from 'react';
 import './BookAppointment.css';
 
@@ -8,23 +9,31 @@ interface BookAppointmentProps {
 }
 
 const BookAppointment: React.FC<BookAppointmentProps> = ({ isOpen, onClose }) => {
-  const [doctor, setDoctor] = useState('');
+  const [doctorInfo, setDoctor] = useState('');
   const [userInfo, setUserInfo] = useState('John Doe');  // Replace with actual user info
   const [date, setDate] = useState('');
-  const [timeSlot, setTimeSlot] = useState('');
-  const [status] = useState('Scheduled');
-  const [insurance, setInsurance] = useState(false);
+  const [breif, setbreif] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const appointmentData = {
-      doctor,
+      doctorInfo,
       userInfo,
       date,
-      timeSlot,
-      status,
-      insurance,
+      breif
     };
+    try {
+      const response = await axios.post(`http://localhost:3000/api/users/book-appointment`,appointmentData);
+      console.log("OK")
+      setSuccessMessage(response.data.message);
+      setErrorMessage(null);
+    } catch (error) {
+      setErrorMessage('Failed to create appointment. Please try again.');
+      setSuccessMessage(null);
+    }
     console.log("Booking Appointment:", appointmentData);
     onClose();
   };
@@ -38,7 +47,7 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ isOpen, onClose }) =>
         <form onSubmit={handleSubmit}>
           <label>
             Doctor:
-            <select value={doctor} onChange={(e) => setDoctor(e.target.value)} required>
+            <select value={doctorInfo} onChange={(e) => setDoctor(e.target.value)} required>
               <option value="">Select Doctor</option>
               <option value="Dr. Smith">Dr. Smith</option>
               <option value="Dr. Johnson">Dr. Johnson</option>
@@ -55,7 +64,7 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ isOpen, onClose }) =>
             <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
           </label>
 
-          <label>
+          {/* <label>
             Time Slot:
             <select value={timeSlot} onChange={(e) => setTimeSlot(e.target.value)} required>
               <option value="">Select Time Slot</option>
@@ -63,21 +72,26 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ isOpen, onClose }) =>
               <option value="10:00 AM">10:00 AM</option>
               <option value="11:00 AM">11:00 AM</option>
             </select>
-          </label>
+          </label> */}
 
-          <label>
+          {/* <label>
             Status:
             <input type="text" value={status} readOnly />
-          </label>
+          </label> */}
 
           <label>
+            Brief:
+            <input type="text" value={breif} onChange={(e) => setbreif(e.target.value)} required/>
+          </label>
+
+          {/* <label>
             Use Insurance:
             <input
               type="checkbox"
               checked={insurance}
               onChange={(e) => setInsurance(e.target.checked)}
             />
-          </label>
+          </label> */}
 
           <button type="submit">Confirm Appointment</button>
           <button type="button" onClick={onClose} className="cancel-btn">

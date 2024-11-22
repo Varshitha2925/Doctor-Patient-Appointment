@@ -10,37 +10,35 @@ const appointmentSchema = new mongoose.Schema(
     },
     userId: {
       type: String,
-      required: true,
+      
     },
     doctorId: {
       type: String,
-      required: true,
+      
     },
     doctorInfo: {
       type: String,
-      required: true,
+      
     },
     userInfo: {
       type: String,
-      required: true,
+      
     },
     date: {
       type: String,
-      required: true,
+      
     },
     status: {
       type: String,
-      required: true,
       default: "pending",
     },
     timeline: {
       type: String,
-      required: true,
       default: "Up-Comming",
     },
     time: {
       type: Array,
-      required: true,
+      
     },
     medication: {
       type: Array,
@@ -50,8 +48,10 @@ const appointmentSchema = new mongoose.Schema(
     },
     insurance: {
       type: Boolean,
+    },
+    brief: {
+      type: String
     }
-    
   },
   { timestamps: true }
 );

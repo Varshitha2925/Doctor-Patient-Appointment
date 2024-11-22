@@ -174,68 +174,94 @@ const getAllDocotrs = async (req, res) => {
     });
   }
 };
-
-//BOOK APPOINTMENT
+//Book Appointment
 const bookeAppointmnet = async (req, res) => {
-  try {
-    const newAppointment = new appointmentModel(req.body);
-    const newPrescription = new prescriptionModel();
-    newPrescription.appointmentId = newAppointment._id;
-    newPrescription.doctorId = req.body.doctorId;
-    newPrescription.userId = req.body.userId;
-    newAppointment.appointmentId = newAppointment._id;
-
-    let date = newAppointment.date.split("/");
-    date = `${date[2]}-${date[1]}-${date[0]}`;
-    let startTime = `${date}T${newAppointment.time[0]}Z`;
-    let endTime = `${date}T${newAppointment.time[1]}Z`;
-    console.log(startTime, endTime);
-    newAppointment.appointmentTime[0] = moment(
-      startTime,
-      "YYYY-MM-DDTHH:mm:ss.ssss"
-    ).toISOString();
-    newAppointment.appointmentTime[1] = moment(
-      endTime,
-      "YYYY-MM-DDTHH:mm:ss.ssss"
-    ).toISOString();
-    console.log("new Appoint", newAppointment.appointmentTime);
-    const doctorId = req.body.doctorId;
-    const appointments = await appointmentModel.find({
-      doctorId,
-      date: req.body.date,
-      time: {
-        $gte: req.body.time[0],
-        $lte: req.body.time[1],
-      },
-    });
-    if (appointments.length > 0) {
-      return res.status(200).send({
-        message: "Appointments not Availibale at this time",
-        success: true,
-      });
-    }
-
-    await newAppointment.save();
-    await newPrescription.save();
-    const toEmail = "varshitha.2925@gmail.com";
-    const subject = "Apoointment Confirmation";
-    const content = `Hi ${newAppointment.userInfo}\nYour appointment has been successfully booked at ${newAppointment.date} with ${newAppointment.doctorInfo}`;
-    await sendEmail(toEmail, subject, content);
-
-    res.status(200).send({
-      success: true,
-      message: "Appointment Book succesfully",
-      data: newAppointment,
-    });
-  } catch (error) {
+  try{
+  const newAppointment = new appointmentModel(req.body);
+  // newPrescription.appointmentId = newAppointment._id;
+  // newPrescription.doctorId = req.body.doctorId;
+  // newPrescription.userId = req.body.userId;
+  await newAppointment.save();
+  res.status(200).send({
+  success: true,
+  message: "Appointment Book succesfully",
+  data: newAppointment,
+  });}
+  catch{
     console.log(error);
     res.status(500).send({
       success: false,
       error,
       message: "Error While Booking Appointment",
     });
+
   }
-};
+}
+
+
+
+
+//BOOK APPOINTMENT
+// const bookeAppointmnet = async (req, res) => {
+//   try {
+//     const newAppointment = new appointmentModel(req.body);
+//     const newPrescription = new prescriptionModel();
+//     newPrescription.appointmentId = newAppointment._id;
+//     newPrescription.doctorId = req.body.doctorId;
+//     newPrescription.userId = req.body.userId;
+//     newAppointment.appointmentId = newAppointment._id;
+
+//     let date = newAppointment.date.split("/");
+//     date = `${date[2]}-${date[1]}-${date[0]}`;
+//     let startTime = `${date}T${newAppointment.time[0]}Z`;
+//     let endTime = `${date}T${newAppointment.time[1]}Z`;
+//     console.log(startTime, endTime);
+//     newAppointment.appointmentTime[0] = moment(
+//       startTime,
+//       "YYYY-MM-DDTHH:mm:ss.ssss"
+//     ).toISOString();
+//     newAppointment.appointmentTime[1] = moment(
+//       endTime,
+//       "YYYY-MM-DDTHH:mm:ss.ssss"
+//     ).toISOString();
+//     console.log("new Appoint", newAppointment.appointmentTime);
+//     const doctorId = req.body.doctorId;
+//     const appointments = await appointmentModel.find({
+//       doctorId,
+//       date: req.body.date,
+//       time: {
+//         $gte: req.body.time[0],
+//         $lte: req.body.time[1],
+//       },
+//     });
+//     if (appointments.length > 0) {
+//       return res.status(200).send({
+//         message: "Appointments not Availibale at this time",
+//         success: true,
+//       });
+//     }
+
+//     await newAppointment.save();
+//     await newPrescription.save();
+//     const toEmail = "varshitha.2925@gmail.com";
+//     const subject = "Apoointment Confirmation";
+//     const content = `Hi ${newAppointment.userInfo}\nYour appointment has been successfully booked at ${newAppointment.date} with ${newAppointment.doctorInfo}`;
+//     await sendEmail(toEmail, subject, content);
+
+//     res.status(200).send({
+//       success: true,
+//       message: "Appointment Book succesfully",
+//       data: newAppointment,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send({
+//       success: false,
+//       error,
+//       message: "Error While Booking Appointment",
+//     });
+//   }
+// };
 
 const isInsurance = async(req, res) => {
   try{
@@ -300,7 +326,7 @@ const userAppointments = async (req, res) => {
     const appointments = await appointmentModel.find({});
     appointments.forEach(async (record) => {
       let date = new Date(record.appointmentTime[0]);
-      console.log(String(date.getMonth()));
+      // console.log(String(date.getMonth()));
       if (
         String(date.getMonth() + 1) == req.query.month &&
         req.query.month != "undefined"
@@ -309,7 +335,7 @@ const userAppointments = async (req, res) => {
       } else {
         array = appointments;
       }
-      console.log(record.date);
+      // console.log(record.date);
     });
     res.status(200).send({
       success: true,
@@ -325,6 +351,7 @@ const userAppointments = async (req, res) => {
     });
   }
 };
+
 //generating PDF for medication
 const downloadMedication = async (req, res) => {
   try {
@@ -392,6 +419,28 @@ const downloadMedication = async (req, res) => {
     });
   }
 };
+
+//Cancel Appointment
+const cancelAppointment = async (req, res) => {
+  try {
+    const {id} = req.params;
+    const appointments = await appointmentModel.findByIdAndDelete(id);
+    
+    res.status(200).send({
+      success: true,
+      message: "Users Appointments Fetch SUccessfully",
+      data: appointments,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error In User Appointments",
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -402,5 +451,6 @@ module.exports = {
   userAppointments,
   bookingAvailability,
   downloadMedication,
-  isInsurance
+  isInsurance,
+  cancelAppointment
 };

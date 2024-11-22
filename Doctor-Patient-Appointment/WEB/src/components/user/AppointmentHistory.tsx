@@ -1,6 +1,6 @@
 // src/components/AppointmentHistory.tsx
 import axios from 'axios';
-import React, { Key, ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import './AppointmentHistory.css';
 
 interface Appointment {
@@ -8,7 +8,7 @@ interface Appointment {
   prescription: any;
   type: ReactNode;
   time: ReactNode;
-  appointmentId: Key | null | undefined;
+  appointmentId: any;
   id: string;
   doctorName: string;
   date: string;
@@ -29,12 +29,13 @@ const AppointmentHistory: React.FC = () => {
   // .catch((error) => {
   //   console.error('Error fetching data:', error);
   // });
+  
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/api/users/user-appointments`);
         setAppointments(response.data.data);
-        console.log(response.data.data)
+        console.log("DATA:\n",response.data.data)
       } catch (error) {
         console.error('Error fetching appointments:', error);
       } finally {
@@ -49,17 +50,19 @@ const AppointmentHistory: React.FC = () => {
   //   { id: 'APP003', doctorName: 'Dr. Brown', date: '2023-12-12', status: 'Cancelled', prescriptionAvailable: false },
   // ];
 
-  const handleReschedule = (id: string) => {
-    console.log(`Rescheduling appointment: ${id}`);
+  const handleReschedule = (appointmentId: string) => {
+    console.log(`Rescheduling appointment: ${appointmentId}`);
   };
 
-  const handleCancel = (id: string) => {
-    console.log(`Cancelling appointment: ${id}`);
+  const handleCancel = (appointmentId: string) => {
+    console.log(`Cancelling appointment: ${appointmentId}`);
   };
 
-  const handleDownloadPrescription = (id: string) => {
-    console.log(`Downloading prescription for appointment: ${id}`);
+  const handleDownloadPrescription = (appointmentId: string) => {
+    console.log(`Downloading prescription for appointment: ${appointmentId}`);
   };
+
+  console.log("Appointments",appointments)
 
   return (
     <div className="appointment-history">
@@ -83,8 +86,8 @@ const AppointmentHistory: React.FC = () => {
                 <td>{appointment.date}</td>
                 <td>{appointment.time}</td>
                 <td>
-                <button onClick={() => handleReschedule(appointment.id)}>Reschedule</button>
-                <button onClick={() => handleCancel(appointment.id)}>Cancel</button>
+                <button onClick={() => handleReschedule(appointment.appointmentId)}>Reschedule</button>
+                <button onClick={() => handleCancel(appointment.appointmentId)}>Cancel</button>
                 </td>
                 <td>{appointment.status}</td>
                 <td>

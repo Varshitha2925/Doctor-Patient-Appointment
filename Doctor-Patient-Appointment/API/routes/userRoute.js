@@ -16,6 +16,7 @@ const {
   bookingAvailability,
   userAppointments,
   downloadMedication,
+  cancelAppointment
 } = require("../controllers/userController");
 
 //router onject
@@ -51,6 +52,9 @@ router.get("/medicationDownload", downloadMedication);
 
 //Insuarance
 router.get("/insurance", isInsurance);
+
+//Cancel Appointment
+router.delete("/appointment/:id", cancelAppointment);
 
 
 module.exports = router;
