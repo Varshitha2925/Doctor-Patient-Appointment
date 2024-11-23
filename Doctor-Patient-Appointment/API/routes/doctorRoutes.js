@@ -12,24 +12,24 @@ const validateToken = require("../middlewares/validateTokenHandler");
 const router = express.Router();
 
 //POST SINGLE DOC INFO
-router.post("/getDoctorInfo", validateToken, getDoctorInfoController);
+router.post("/getDoctorInfo", getDoctorInfoController);
 
 //POST UPDATE PROFILE
-router.post("/updateProfile", validateToken, updateProfileController);
+router.post("/updateProfile", updateProfileController);
 
 //GET Appointments
-router.get("/doctor-appointments", validateToken, doctorAppointmentsController);
+router.get("/doctor-appointments", doctorAppointmentsController);
 
 //POST Update Status
-router.post("/update-status", validateToken, updateStatusController);
+router.post("/update-status", updateStatusController);
 
 //POST Update Comments
-router.post("/update-comments", validateToken, multipleCommentsController);
+router.post("/update-comments", multipleCommentsController);
 
 //GET total fee
-router.get("/totalFee", validateToken, totalFeeCalculator);
+router.get("/totalFee", totalFeeCalculator);
 
 //POST medication
-router.post("/postMedication", validateToken, postMedication);
+router.post("/postMedication", postMedication);
 
 module.exports = router;

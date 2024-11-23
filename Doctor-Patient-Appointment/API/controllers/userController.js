@@ -178,7 +178,7 @@ const getAllDocotrs = async (req, res) => {
 const bookeAppointmnet = async (req, res) => {
   try{
   const newAppointment = new appointmentModel(req.body);
-  // newPrescription.appointmentId = newAppointment._id;
+  newAppointment.appointmentId = newAppointment._id;
   // newPrescription.doctorId = req.body.doctorId;
   // newPrescription.userId = req.body.userId;
   await newAppointment.save();

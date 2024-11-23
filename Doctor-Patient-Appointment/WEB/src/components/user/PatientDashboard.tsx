@@ -6,7 +6,6 @@ import './PatientDashboard.css';
 
 const PatientDashboard: React.FC = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
-  
   const openBooking = () => setIsBookingOpen(true);
   const closeBooking = () => setIsBookingOpen(false);
   

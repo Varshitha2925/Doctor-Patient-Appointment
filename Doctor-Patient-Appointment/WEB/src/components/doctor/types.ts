@@ -1,14 +1,24 @@
 // src/types.ts
 
+import { ReactNode } from "react";
+
 export interface Doctor {
-    id: string;
-    name: string;
-    specialization: string;
-    consultationFee: number;
-    availability: Array<{ day: string; timeSlots: string[] }>;
+    userId: String;
+    firstName:  String;
+    lastName: String
+    phone: String
+    email:String
+    website: String
+    address: String;
+    specialization: ReactNode;
+    experience: String;
+    feesPerCunsaltation: Number;
+    status: String;
+    timings: ReactNode;
   }
   
   export interface Appointment {
+    userInfo: String;
     id: string;
     patientName: string;
     date: string;

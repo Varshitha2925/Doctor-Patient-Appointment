@@ -54,7 +54,17 @@ const AppointmentHistory: React.FC = () => {
     console.log(`Rescheduling appointment: ${appointmentId}`);
   };
 
-  const handleCancel = (appointmentId: string) => {
+  const handleCancel = async (appointmentId: string) => {
+    console.log("AAP",appointmentId)
+    try {
+      const response = await axios.delete(`http://localhost:3000/api/users/appointment/${appointmentId}`);
+      setAppointments(response.data.data);
+      console.log("DATA:\n",response.data.data)
+    } catch (error) {
+      console.error('Error fetching appointments:', error);
+    } finally {
+      setLoading(false);
+    }
     console.log(`Cancelling appointment: ${appointmentId}`);
   };
 

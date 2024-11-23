@@ -45,38 +45,26 @@ const updateProfileController = async (req, res) => {
     });
   }
 };
-
 const doctorAppointmentsController = async (req, res) => {
   try {
-    const doctor = await doctorModel.findOne({ userId: req.user.id });
-    const cutoffTime = moment().subtract(3, "days").toDate();
-    console.log("today Date", moment().toDate());
-    const recordsToDelete = await appointmentModel.find({
-      doctorId: doctor._id,
-      status: "pending",
-      createdAt: { $lt: cutoffTime },
-    });
-
-    recordsToDelete.forEach(async (record) => {
-      await appointmentModel.findByIdAndDelete(record._id);
-      console.log(`Record ${record._id} deleted!`);
-    });
-
-    const appointments = await appointmentModel.find({
-      doctorId: doctor._id,
-    });
-    const currentDate = new Date();
-    appointments.forEach(async (record) => {
-      if (record.time[0] <= currentDate) {
-        record.timeline = "In Progress";
-      } else {
-        record.timeline = "Up Comming";
-      }
-    });
-
+    let array = [];
+    const appointments = await appointmentModel.find({});
+    // appointments.forEach(async (record) => {
+    //   let date = new Date(record.appointmentTime[0]);
+    //   // console.log(String(date.getMonth()));
+    //   if (
+    //     String(date.getMonth() + 1) == req.query.month &&
+    //     req.query.month != "undefined"
+    //   ) {
+    //     array.push(record);
+    //   } else {
+    //     array = appointments;
+    //   }
+      // console.log(record.date);
+    // });
     res.status(200).send({
       success: true,
-      message: "Doctor Appointments fetch Successfully",
+      message: "Users Appointments Fetch SUccessfully",
       data: appointments,
     });
   } catch (error) {
@@ -84,10 +72,53 @@ const doctorAppointmentsController = async (req, res) => {
     res.status(500).send({
       success: false,
       error,
-      message: "Error in Doc Appointments",
+      message: "Error In User Appointments",
     });
   }
 };
+
+// const doctorAppointmentsController = async (req, res) => {
+//   try {
+//     const doctor = await doctorModel.findOne({ userId: req.user.id });
+//     const cutoffTime = moment().subtract(3, "days").toDate();
+//     console.log("today Date", moment().toDate());
+//     const recordsToDelete = await appointmentModel.find({
+//       doctorId: doctor._id,
+//       status: "pending",
+//       createdAt: { $lt: cutoffTime },
+//     });
+
+//     recordsToDelete.forEach(async (record) => {
+//       await appointmentModel.findByIdAndDelete(record._id);
+//       console.log(`Record ${record._id} deleted!`);
+//     });
+
+//     const appointments = await appointmentModel.find({
+//       doctorId: doctor._id,
+//     });
+//     const currentDate = new Date();
+//     appointments.forEach(async (record) => {
+//       if (record.time[0] <= currentDate) {
+//         record.timeline = "In Progress";
+//       } else {
+//         record.timeline = "Up Comming";
+//       }
+//     });
+
+//     res.status(200).send({
+//       success: true,
+//       message: "Doctor Appointments fetch Successfully",
+//       data: appointments,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send({
+//       success: false,
+//       error,
+//       message: "Error in Doc Appointments",
+//     });
+//   }
+// };
 
 const updateStatusController = async (req, res) => {
   try {
