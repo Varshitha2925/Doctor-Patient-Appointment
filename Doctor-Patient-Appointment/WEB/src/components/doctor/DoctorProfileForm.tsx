@@ -76,10 +76,11 @@ const UpdateDoctorProfile: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.put(
+      const response = await axios.post(
         `http://localhost:3000/api/doctor/updateProfile`,
         doctorProfile
       );
+      console.log("Done")
       setSuccessMessage(response.data.message);
       setErrorMessage(null);
     } catch (error) {

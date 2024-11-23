@@ -56,5 +56,4 @@ router.get("/insurance", isInsurance);
 //Cancel Appointment
 router.delete("/appointment/:id", cancelAppointment);
 
-
 module.exports = router;

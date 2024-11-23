@@ -30,6 +30,6 @@ router.post("/update-comments", multipleCommentsController);
 router.get("/totalFee", totalFeeCalculator);
 
 //POST medication
-router.post("/postMedication", postMedication);
+router.post("/postMedication",  postMedication);
 
 module.exports = router;

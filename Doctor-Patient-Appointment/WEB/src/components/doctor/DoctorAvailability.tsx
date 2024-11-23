@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './DoctorAvailability.css';
 
 interface Slot {
+  userId:string;
   date: string;
   startTime: string;
   endTime: string;
@@ -10,6 +11,7 @@ interface Slot {
 const DoctorAvailability: React.FC = () => {
   const [slots, setSlots] = useState<Slot[]>([]);
   const [newSlot, setNewSlot] = useState<Slot>({
+    userId:"",
     date: '',
     startTime: '',
     endTime: ''
@@ -25,7 +27,7 @@ const DoctorAvailability: React.FC = () => {
   const addSlot = () => {
     if (newSlot.date && newSlot.startTime && newSlot.endTime) {
       setSlots([...slots, newSlot]);
-      setNewSlot({ date: '', startTime: '', endTime: '' }); // Clear the form
+      setNewSlot({ userId: '', date: '', startTime: '', endTime: '' }); // Clear the form
     } else {
       alert('Please fill in all fields');
     }
