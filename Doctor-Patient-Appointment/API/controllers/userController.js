@@ -441,6 +441,32 @@ const cancelAppointment = async (req, res) => {
   }
 };
 
+//Cancel Appointment
+const assigndoctor = async (req, res) => {
+  try {
+    // const {id , doctorName} = req.body
+    const id = req.body.appointmentId
+    const doctorName = req.body.doctorId
+    console.log(id)
+    const appointments = await appointmentModel.findById(id);
+    appointments.doctorInfo = doctorName
+    await appointments.save()
+    
+    res.status(200).send({
+      success: true,
+      message: "Users Appointments Fetch SUccessfully",
+      data: appointments,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error In User Appointments",
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
@@ -452,5 +478,6 @@ module.exports = {
   bookingAvailability,
   downloadMedication,
   isInsurance,
-  cancelAppointment
+  cancelAppointment,
+  assigndoctor
 };

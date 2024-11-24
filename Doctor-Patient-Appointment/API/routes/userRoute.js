@@ -16,7 +16,8 @@ const {
   bookingAvailability,
   userAppointments,
   downloadMedication,
-  cancelAppointment
+  cancelAppointment,
+  assigndoctor
 } = require("../controllers/userController");
 
 //router onject
@@ -55,5 +56,8 @@ router.get("/insurance", isInsurance);
 
 //Cancel Appointment
 router.delete("/appointment/:id", cancelAppointment);
+
+//assign doctor
+router.post("/assign-doctor", assigndoctor);
 
 module.exports = router;

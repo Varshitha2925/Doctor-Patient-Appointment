@@ -18,6 +18,7 @@ export interface Doctor {
   }
   
   export interface Appointment {
+    appointmentId: String;
     userInfo: String;
     id: string;
     patientName: string;
