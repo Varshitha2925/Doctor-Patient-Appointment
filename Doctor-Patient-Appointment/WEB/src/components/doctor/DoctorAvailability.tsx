@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { useState } from 'react';
 import './DoctorAvailability.css';
 
@@ -24,10 +25,31 @@ const DoctorAvailability: React.FC = () => {
   };
 
   // Add new slot to the slots list
-  const addSlot = () => {
+  const addSlot = async () => {
     if (newSlot.date && newSlot.startTime && newSlot.endTime) {
+      console.log("time",newSlot.date)
+      try {
+        const response = await axios.post(
+          'http://localhost:3000/api/doctor/timeSlot',
+          {
+            userId: '643fbc9ecab1ed35f0534e6a',
+            time:{
+              date: newSlot.date,
+              startTime: newSlot.startTime,
+              endTime: newSlot.endTime
+            }
+          }
+        );
+        // setDoctorProfile(response.data.data);
+      } catch (error) {
+        console.error('Error fetching doctor profile:', error);
+      }
       setSlots([...slots, newSlot]);
+      // console.log("Slots", slots)
       setNewSlot({ userId: '', date: '', startTime: '', endTime: '' }); // Clear the form
+      console.log("NewSlot",newSlot)
+
+      console.log("Slots", slots)
     } else {
       alert('Please fill in all fields');
     }

@@ -1,5 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import './DoctorAppointments.css';
+import './DoctorProfile.css';
 
 export interface DoctorProfile {
   userId: string;
@@ -91,7 +93,7 @@ const UpdateDoctorProfile: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="profile-section">
       <h2>Update Doctor Profile</h2>
       <form onSubmit={handleSubmit}>
         <div>

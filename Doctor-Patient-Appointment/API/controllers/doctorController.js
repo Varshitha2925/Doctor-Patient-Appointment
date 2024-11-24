@@ -5,6 +5,7 @@ const feedbackModel = require("../models/feedbackModel");
 const userModel = require("../models/userModel");
 const moment = require("moment");
 const prescriptionModel = require("../models/prescriptionModel");
+const timeSlotModel = require("../models/timeSlot")
 
 const getDoctorInfoController = async (req, res) => {
   try {
@@ -45,9 +46,10 @@ const updateProfileController = async (req, res) => {
     });
   }
 };
+
 const doctorAppointmentsController = async (req, res) => {
   try {
-    let array = [];
+    // let array = [];
     const appointments = await appointmentModel.find({});
     // appointments.forEach(async (record) => {
     //   let date = new Date(record.appointmentTime[0]);
@@ -225,6 +227,39 @@ const postMedication = async (req, res) => {
     });
   }
 };
+const timeSlotController = async (req, res) => {
+  try {
+    // const userId = req.body.userId
+    // const time = req.body.time
+    console.log("req.body", req.body)
+    const { userId, time } = req.body;
+    const timeSlot = await timeSlotModel.findByIdAndUpdate(
+      userId,
+      { time }
+    );
+    if(timeSlot){
+      await timeSlot.save();
+    }
+    else{
+      const newSlot = new timeSlotModel({ userId, time});
+      await newSlot.save();
+    }
+    console.log("timeSlot", timeSlot)
+    res.status(200).send({
+      success: true,
+      message: "Comment Updated Successfully",
+      data: timeSlot,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error In Updating Comments",
+    });
+  }
+};
+
 
 module.exports = {
   getDoctorInfoController,
@@ -234,4 +269,5 @@ module.exports = {
   multipleCommentsController,
   totalFeeCalculator,
   postMedication,
+  timeSlotController
 };

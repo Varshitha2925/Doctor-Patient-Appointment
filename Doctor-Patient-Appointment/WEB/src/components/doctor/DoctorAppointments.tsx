@@ -4,13 +4,8 @@ import React, { useEffect, useState } from 'react';
 import './DoctorAppointments.css';
 import { Appointment } from './types';
 
-interface DoctorAppointmentsProps {
-  appointments: Appointment[];
-  onAccept: (appointmentId: string) => void;
-  onCancel: (appointmentId: string) => void;
-}
 
-const DoctorAppointments: React.FC<DoctorAppointmentsProps> = ({ onAccept, onCancel }) => {
+const DoctorAppointments: React.FC = ({ }) => {
   const [appointment, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
@@ -49,7 +44,7 @@ const DoctorAppointments: React.FC<DoctorAppointmentsProps> = ({ onAccept, onCan
               <td>{appointment.status}</td>
               <td>
                 {
-                  <button onClick={() => onAccept(appointment.id)}>Accept{appointment.id}</button>
+                  // <button onClick={() => onAccept(appointment.id)}>Accept{appointment.id}</button>
                 /* {appointment.status === 'Pending' && (
                   <>
                     <button onClick={() => onAccept(appointment.id)}>Accept{appointment.id}</button>
