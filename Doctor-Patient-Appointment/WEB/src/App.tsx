@@ -46,7 +46,8 @@
 // src/App.tsx
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import NurseDashboard from './components/NurseDashboard';
+import LoginPage from './components/login';
+import RegistrationPage from './components/registration';
 
 const App: React.FC = () => {
   return (
@@ -55,7 +56,9 @@ const App: React.FC = () => {
         <h1>Doctor-Patient Appointment</h1>
         <Routes>
           {/* <Route path="/" element={<DoctorDashboard />} /> */}
-          <Route path="/" element={<NurseDashboard />} />
+          {/* <Route path="/" element={<NurseDashboard />} /> */}
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/register" element={<RegistrationPage />} />
         </Routes>
       </div>
     </Router>
