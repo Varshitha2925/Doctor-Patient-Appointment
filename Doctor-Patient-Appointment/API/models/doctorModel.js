@@ -48,7 +48,12 @@ const doctorSchema = new mongoose.Schema(
       type: Array,
       // required: [true, "work timing is required"],
     },
+    password: {
+      type: String,
+      required: [true, "Please add the user password"],
+    },
   },
+
   { timestamps: true }
 );
 

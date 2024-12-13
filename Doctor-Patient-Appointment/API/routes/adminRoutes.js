@@ -3,23 +3,25 @@ const {
   getAllUsersController,
   getAllDoctorsController,
   changeAccountStatusController,
-  deleteOldAppointments,
+  deleteDoctor
 } = require("../controllers/adminController");
 const validateToken = require("../middlewares/validateTokenHandler");
 
 const router = express.Router();
 
 //GET METHOD || USERS
-router.get("/getAllUsers", validateToken, getAllUsersController);
+router.get("/getAllUsers", getAllUsersController);
 
 //GET METHOD || DOCTORS
-router.get("/getAllDoctors", validateToken, getAllDoctorsController);
+router.get("/getAllDoctors", getAllDoctorsController);
 
 //POST ACCOUNT STATUS
 router.post(
   "/changeAccountStatus",
-  validateToken,
+  
   changeAccountStatusController
 );
+//DELETE
+router.delete("/deleteDoctor/:id",deleteDoctor)
 
 module.exports = router;

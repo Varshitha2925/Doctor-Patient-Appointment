@@ -1,4 +1,6 @@
+import axios from "axios";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Patient {
   username: string;
@@ -9,6 +11,7 @@ interface Patient {
 interface Doctor {
   firstName: string;
   lastName: string;
+  password: string,
   phone: string;
   email: string;
   website?: string;
@@ -26,6 +29,7 @@ const RegistrationPage: React.FC = () => {
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -38,9 +42,20 @@ const RegistrationPage: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if(userType == "Patient"){
+      await axios.post(`http://localhost:3000/api/users/register`, formData)
     console.log("Submitted Data: ", formData);
+    navigate('/');
+    }
+    else{
+      const response = await axios.post(`http://localhost:3000/api/users/apply-doctor`, formData)
+      console.log("response", response)
+      navigate('/');
+    }
+    
+    
   };
 
   return (
@@ -125,6 +140,14 @@ const RegistrationPage: React.FC = () => {
               onChange={handleInputChange}
               style={styles.input}
               required
+            />
+            <label style={styles.label}>Password</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password || ""}
+              onChange={handleInputChange}
+              style={styles.input}
             />
             <label style={styles.label}>Address</label>
             <input

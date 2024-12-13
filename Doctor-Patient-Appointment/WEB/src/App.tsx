@@ -46,8 +46,10 @@
 // src/App.tsx
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-import LoginPage from './components/login';
+import AdminDashboard from './components/admin';
+import DoctorDashboard from './components/doctor/DoctorDashboard';
 import RegistrationPage from './components/registration';
+import PatientDashboard from './components/user/PatientDashboard';
 
 const App: React.FC = () => {
   return (
@@ -55,10 +57,11 @@ const App: React.FC = () => {
       <div className="App">
         <h1>Doctor-Patient Appointment</h1>
         <Routes>
-          {/* <Route path="/" element={<DoctorDashboard />} /> */}
-          {/* <Route path="/" element={<NurseDashboard />} /> */}
-          <Route path="/" element={<LoginPage />} />
+          <Route path="/" element={<AdminDashboard />} />
           <Route path="/register" element={<RegistrationPage />} />
+          <Route path="/dashboard" element={<PatientDashboard />}/>
+          <Route path="/doctor-dashboard" element={<DoctorDashboard />}/>
+
         </Routes>
       </div>
     </Router>

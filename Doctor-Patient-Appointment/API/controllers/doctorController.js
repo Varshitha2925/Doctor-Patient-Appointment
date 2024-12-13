@@ -2,10 +2,43 @@ const { hash } = require("bcrypt");
 const appointmentModel = require("../models/appointmentModel");
 const doctorModel = require("../models/doctorModel");
 const feedbackModel = require("../models/feedbackModel");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
 const moment = require("moment");
 const prescriptionModel = require("../models/prescriptionModel");
 const timeSlotModel = require("../models/timeSlot")
+
+const login = async (req, res) => {
+  
+  const { email, password } = req.body;
+  console.log("Login creds", {email,password})
+  if (!email || !password) {
+    res.status(400);
+    throw new Error("All fields are mandatory");
+  }
+  const user = await doctorModel.findOne({ email }).where(verified = 'true');
+  console.log("USER" , user)
+
+  //compare password with hashed password
+  if (user && (await bcrypt.compare(password, user.password))) {
+    const accessToken = jwt.sign(
+      {
+        user: {
+          username: user.username,
+          email: user.email,
+          id: user.id,
+        },
+      },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "10h" }
+    );
+    res.status(200).json({user});
+  } else {
+    res.status(401);
+    throw new Error("email or password is not valid");
+  }
+  }
 
 const getDoctorInfoController = async (req, res) => {
   try {
@@ -124,10 +157,15 @@ const doctorAppointmentsController = async (req, res) => {
 
 const updateStatusController = async (req, res) => {
   try {
-    const { appointmentsId, status, timeline } = req.body;
+
+    // const { appointmentsid, status} = req.body;
+    console.log("STATUS", req.body)
+    const appointmentsid = req.body.appointmentid
+    const status = req.body.status
+    console.log("GETTT", {appointmentsid, status})
     const appointments = await appointmentModel.findByIdAndUpdate(
-      appointmentsId,
-      { status, timeline }
+      appointmentsid,
+      {status:status}
     );
     res.status(200).send({
       success: true,
@@ -233,9 +271,9 @@ const timeSlotController = async (req, res) => {
     // const time = req.body.time
     console.log("req.body", req.body)
     const { userId, time } = req.body;
-    const timeSlot = await timeSlotModel.findByIdAndUpdate(
-      userId,
-      { time }
+    const timeSlot = await timeSlotModel.findOneAndUpdate(
+      { userId: userId },
+      { $push: { time: time } },
     );
     if(timeSlot){
       await timeSlot.save();
@@ -258,7 +296,67 @@ const timeSlotController = async (req, res) => {
       message: "Error In Updating Comments",
     });
   }
-};
+}
+const gettimeSlotController = async (req, res) => {
+    try {
+      // const userId = req.body.userId
+      // const time = req.body.time
+    
+      const userId= req.params.id;
+
+      console.log("USERID" , userId)
+      const timeSlot = await timeSlotModel.findOne(
+        { userId: userId },
+        
+      );
+      
+      console.log("timeSlot", timeSlot)
+      res.status(200).send({
+        success: true,
+        message: "Comment Updated Successfully",
+        data: timeSlot,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({
+        success: false,
+        error,
+        message: "Error In Updating Comments",
+      });
+    }
+}
+
+const removetimeSlotController = async (req, res) => {
+  try {
+    // const userId = req.body.userId
+    // const time = req.body.time
+  
+    const userId= req.params.id;
+
+    console.log("USERID" , userId)
+    const timeSlot = await timeSlotModel.findOneAndDelete({
+      userId : userId,
+    });
+    
+    console.log("timeSlot", timeSlot)
+    res.status(200).send({
+      success: true,
+      message: "Comment Updated Successfully",
+      data: timeSlot,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error In Updating Comments",
+    });
+  }
+}
+
+
+
+
 
 
 module.exports = {
@@ -269,5 +367,8 @@ module.exports = {
   multipleCommentsController,
   totalFeeCalculator,
   postMedication,
-  timeSlotController
+  timeSlotController,
+  login,
+  gettimeSlotController,
+  removetimeSlotController
 };

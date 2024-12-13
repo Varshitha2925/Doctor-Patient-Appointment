@@ -123,7 +123,11 @@ const currentUser = asyncHandler(async (req, res) => {
 // Apply DOctor CTRL
 const applyDoctor = async (req, res) => {
   try {
+    // console.log("BODY" , req.body.password)
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    // console.log("Hashed Password", hashedPassword);
     const newDoctor = await doctorModel({ ...req.body, status: "pending" });
+    newDoctor.password = hashedPassword;
     await newDoctor.save();
     res.status(201).send({
       success: true,
@@ -144,14 +148,7 @@ const applyDoctor = async (req, res) => {
 const getAllDocotrs = async (req, res) => {
   // console.log("req.query", req.query);
   try {
-    // let specialization = req.query.specialization.split(",");
-    // let experience = req.query.experience;
-    // let sort = req.query.sort;
-    // if (sort == "asc") {
-    //   sort = 1;
-    // } else {
-    //   sort = -1;
-    // }
+    
     const doctors = await doctorModel
       .find({})
       // .where("specialization")
@@ -467,6 +464,34 @@ const assigndoctor = async (req, res) => {
   }
 };
 
+//Reschedule Appointment
+const reschedule = async (req, res) => {
+  try {
+    // const {id , doctorName} = req.body
+    const id = req.body.appointmentId
+    const time = req.body.time
+    console.log(id)
+    const appointments = await appointmentModel.findById(id);
+    appointments.time = time
+    await appointments.save()
+    
+    res.status(200).send({
+      success: true,
+      message: "Users Appointments Fetch SUccessfully",
+      data: appointments,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error In User Appointments",
+    });
+  }
+};
+
+
+
 module.exports = {
   registerUser,
   loginUser,
@@ -479,5 +504,6 @@ module.exports = {
   downloadMedication,
   isInsurance,
   cancelAppointment,
-  assigndoctor
+  assigndoctor,
+  reschedule
 };

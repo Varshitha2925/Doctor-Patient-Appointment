@@ -7,7 +7,9 @@ const {
   multipleCommentsController,
   totalFeeCalculator,
   postMedication,
-  timeSlotController
+  timeSlotController,
+  login,
+  gettimeSlotController
 } = require("../controllers/doctorController");
 const validateToken = require("../middlewares/validateTokenHandler");
 const router = express.Router();
@@ -35,5 +37,12 @@ router.post("/postMedication",  postMedication);
 
 //POST medication
 router.post("/timeSlot",  timeSlotController);
+
+//POST Login
+router.post("/login",  login);
+
+//Get Time Slot
+router.get("/timeSlot/:id", gettimeSlotController)
+
 
 module.exports = router;

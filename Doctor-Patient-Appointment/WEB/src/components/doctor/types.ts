@@ -20,11 +20,11 @@ export interface Doctor {
   export interface Appointment {
     appointmentId: String;
     userInfo: String;
-    id: string;
+    _id: string;
     patientName: string;
     date: string;
     time: string;
-    status: 'Pending' | 'Accepted' | 'Cancelled';
+    status: 'pending' | 'approved' | 'cancelled';
     medicalHistory: string;
   }
   

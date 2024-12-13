@@ -20,15 +20,8 @@ const AppointmentHistory: React.FC = () => {
   // Sample data (ideally fetched from the backend)
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  
-  // // const response = axios.get(`http://localhost:3000/api/users/user-appointments`);
-  // axios.get('http://localhost:3000/api/users/user-appointments')
-  // .then((response) => {
-  //   console.log(response.data); // Extracted data from the response
-  // })
-  // .catch((error) => {
-  //   console.error('Error fetching data:', error);
-  // });
+  const [time, settime] = useState<boolean>()
+
   
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -43,15 +36,19 @@ const AppointmentHistory: React.FC = () => {
       }
     };fetchAppointments();
   }, []);
-      
-  // const appointments: Appointment[] = [
-  //   { id: 'APP001', doctorName: 'Dr. Smith', date: '2023-12-10', status: 'Completed', prescriptionAvailable: true },
-  //   { id: 'APP002', doctorName: 'Dr. Johnson', date: '2023-12-11', status: 'Scheduled', prescriptionAvailable: false },
-  //   { id: 'APP003', doctorName: 'Dr. Brown', date: '2023-12-12', status: 'Cancelled', prescriptionAvailable: false },
-  // ];
 
-  const handleReschedule = (appointmentId: string) => {
+  const handleReschedule = async (appointmentId: string) => {
     console.log(`Rescheduling appointment: ${appointmentId}`);
+    try {
+      const response = await axios.post(`http://localhost:3000/api/users/reschedule`,{
+        appointmentId,
+        time
+      });
+      setAppointments(response.data.data);
+      console.log("DATA:\n",response.data.data)
+    } catch (error) {
+      console.error('Error fetching appointments:', error);
+    }
   };
 
   const handleCancel = async (appointmentId: string) => {

@@ -4,7 +4,7 @@ import './DoctorAppointments.css';
 import './DoctorProfile.css';
 
 export interface DoctorProfile {
-  userId: string;
+  userId: any;
   firstName: string;
   lastName: string;
   phone: string;
@@ -19,8 +19,10 @@ export interface DoctorProfile {
 }
 
 const UpdateDoctorProfile: React.FC = () => {
+  const userId = localStorage.getItem("usreId");
+ 
   const [doctorProfile, setDoctorProfile] = useState<DoctorProfile>({
-    userId: '643fbc9ecab1ed35f0534e6a',
+    userId: userId,
     firstName: '',
     lastName: '',
     phone: '',
@@ -33,7 +35,7 @@ const UpdateDoctorProfile: React.FC = () => {
     status: '',
     timings: [],
   });
-
+  
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -44,10 +46,11 @@ const UpdateDoctorProfile: React.FC = () => {
         const response = await axios.post(
           'http://localhost:3000/api/doctor/getDoctorInfo',
           {
-            userId: '643fbc9ecab1ed35f0534e6a',
+            userId: userId,
           }
         );
         setDoctorProfile(response.data.data);
+        console.log("RESPONSE" , response )
       } catch (error) {
         console.error('Error fetching doctor profile:', error);
       }
@@ -77,11 +80,13 @@ const UpdateDoctorProfile: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("DOCTOR PROFILE" , doctorProfile)
     try {
       const response = await axios.post(
         `http://localhost:3000/api/doctor/updateProfile`,
         doctorProfile
       );
+      
       console.log("Done")
       setSuccessMessage(response.data.message);
       setErrorMessage(null);

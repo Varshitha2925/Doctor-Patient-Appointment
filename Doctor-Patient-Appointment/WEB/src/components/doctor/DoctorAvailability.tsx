@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './DoctorAvailability.css';
 
 interface Slot {
@@ -18,12 +18,31 @@ const DoctorAvailability: React.FC = () => {
     endTime: ''
   });
 
+  useEffect(() => {
+    getTimeSlot()
+  }, []);
+
+
   // Handle input change for new slot data
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setNewSlot({ ...newSlot, [name]: value });
   };
 
+  const userId = localStorage.getItem("userId");
+
+  const getTimeSlot = async() =>{
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/doctor/timeSlot/${userId}`,
+        
+      );
+      setSlots(response.data.data.time)
+      console.log(response.data.data.time)
+    } catch (error) {
+      console.error('Error fetching doctor profile:', error);
+    }
+  }
   // Add new slot to the slots list
   const addSlot = async () => {
     if (newSlot.date && newSlot.startTime && newSlot.endTime) {
@@ -32,7 +51,7 @@ const DoctorAvailability: React.FC = () => {
         const response = await axios.post(
           'http://localhost:3000/api/doctor/timeSlot',
           {
-            userId: '643fbc9ecab1ed35f0534e6a',
+            userId: userId,
             time:{
               date: newSlot.date,
               startTime: newSlot.startTime,
@@ -40,16 +59,19 @@ const DoctorAvailability: React.FC = () => {
             }
           }
         );
+        console.log(response.data.data.time)
+        
         // setDoctorProfile(response.data.data);
       } catch (error) {
         console.error('Error fetching doctor profile:', error);
       }
-      setSlots([...slots, newSlot]);
-      // console.log("Slots", slots)
-      setNewSlot({ userId: '', date: '', startTime: '', endTime: '' }); // Clear the form
-      console.log("NewSlot",newSlot)
+      // setSlots([...slots, newSlot]);
+     
+      // // console.log("Slots", slots)
+      // setNewSlot({ userId: '', date: '', startTime: '', endTime: '' }); // Clear the form
+      // console.log("NewSlot",newSlot)
 
-      console.log("Slots", slots)
+      // console.log("Slots", slots)
     } else {
       alert('Please fill in all fields');
     }
@@ -101,7 +123,7 @@ const DoctorAvailability: React.FC = () => {
                 <th>Date</th>
                 <th>Start Time</th>
                 <th>End Time</th>
-                <th>Actions</th>
+                {/* <th>Actions</th> */}
               </tr>
             </thead>
             <tbody>
@@ -110,9 +132,9 @@ const DoctorAvailability: React.FC = () => {
                   <td>{slot.date}</td>
                   <td>{slot.startTime}</td>
                   <td>{slot.endTime}</td>
-                  <td>
+                  {/* <td>
                     <button onClick={() => removeSlot(index)}>Remove</button>
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>

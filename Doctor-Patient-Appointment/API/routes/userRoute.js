@@ -17,7 +17,7 @@ const {
   userAppointments,
   downloadMedication,
   cancelAppointment,
-  assigndoctor
+  assigndoctor,reschedule
 } = require("../controllers/userController");
 
 //router onject
@@ -59,5 +59,8 @@ router.delete("/appointment/:id", cancelAppointment);
 
 //assign doctor
 router.post("/assign-doctor", assigndoctor);
+
+//assign doctor
+router.post("/reschedule", reschedule);
 
 module.exports = router;

@@ -64,35 +64,11 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ isOpen, onClose }) =>
             <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
           </label>
 
-          {/* <label>
-            Time Slot:
-            <select value={timeSlot} onChange={(e) => setTimeSlot(e.target.value)} required>
-              <option value="">Select Time Slot</option>
-              <option value="09:00 AM">09:00 AM</option>
-              <option value="10:00 AM">10:00 AM</option>
-              <option value="11:00 AM">11:00 AM</option>
-            </select>
-          </label> */}
-
-          {/* <label>
-            Status:
-            <input type="text" value={status} readOnly />
-          </label> */}
-
           <label>
             Brief:
             <input type="text" value={breif} onChange={(e) => setbreif(e.target.value)} required/>
           </label>
-
-          {/* <label>
-            Use Insurance:
-            <input
-              type="checkbox"
-              checked={insurance}
-              onChange={(e) => setInsurance(e.target.checked)}
-            />
-          </label> */}
-
+          
           <button type="submit">Confirm Appointment</button>
           <button type="button" onClick={onClose} className="cancel-btn">
             Cancel

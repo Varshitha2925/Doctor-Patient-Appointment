@@ -1,5 +1,6 @@
+import axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface LoginForm {
   email: string;
@@ -12,83 +13,150 @@ const LoginPage: React.FC = () => {
     email: "",
     password: "",
   });
+  const [email , setemail] = useState<string>('')
+  const [password, setpassword] = useState<string>('')
+  const [error, seterror] = useState<string>('')
+  const navigate = useNavigate();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
+  // };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(`Logging in as ${userType}:`, formData);
+    console.log(`Logging in as ${userType}:`, {
+      email,
+      password
+    });
+    
+    if(userType === "patient"){
+      try {
+        const response = await axios.post('http://localhost:3000/api/users/login', {
+          email,
+          password,
+        });
+        localStorage.setItem('userId', response.data.user._id);
+  
+        console.log("response",response)
+        navigate('/dashboard');
+        if (response.statusText === "OK") {
+          console.log('Login successful');
+           // Save token to local storage
+          console.log('userId', response.data.user._id)
+          navigate('/dashboard'); // Redirect to user/organizer dashboard
+        } else {
+          // setError(response.data.message || 'Login failed');
+        }
+      } catch (err: any) {
 
-    // Example: API call for login
-    try {
-      const response = await fetch(`http://localhost:3000/api/auth/login/${userType}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log("Login success:", result);
-        // Handle login success (e.g., redirect or store token)
-      } else {
-        console.error("Login failed:", response.statusText);
       }
-    } catch (error) {
-      console.error("Error logging in:", error);
     }
+    else if(userType === "doctor"){
+      try {
+        const response = await axios.post('http://localhost:3000/api/doctor/login', {
+          email,
+          password,
+        });
+  
+        console.log("response",response)
+  
+        if (response.statusText === "OK") {
+          console.log('Login successful');
+          localStorage.setItem('userId', response.data.user._id); // Save token to local storage
+          navigate('/doctor-dashboard'); // Redirect to user/organizer dashboard
+        } else {
+          seterror('Admin has not approved yet....!')
+          // setError(response.data.message || 'Login failed');
+        }
+      } catch (err: any) {
+        console.error('Login error:', err);
+      }
+    
+    }
+    else if(userType === "nurse"){
+      try {
+        const response = await axios.post('http://localhost:3000/api/users/login', {
+          email,
+          password,
+        });
+
+        console.log("response",response)
+
+        if (response.statusText === "OK") {
+          console.log('Login successful');
+          localStorage.setItem('organizerId', response.data.user._id); // Save token to local storage
+          if(response.data.status == "approved"){
+
+          }
+          else{
+          navigate('/'); 
+          }// Redirect to user/organizer dashboard
+        } else {
+          // setError(response.data.message || 'Login failed');
+        }
+      } catch (err: any) {
+        // setError(err.response?.data?.message || 'An error occurred. Please try again.');
+        // console.error('Login error:', err);
+      }
+    
+    }
+    else{
+      navigate('/admin-dashboard');
+    }
+    
   };
 
   return (
-    <div style={styles.container}>
+    <div className="login-page" style={styles.container}>
       <h2>Login</h2>
       <select
-        name="userType"
-        value={userType}
-        onChange={(e) => setUserType(e.target.value)}
-        style={styles.select}
-      >
-        <option value="patient">Patient</option>
-        <option value="doctor">Doctor</option>
-        <option value="nurse">Nurse</option>
-        <option value="admin">Admin</option>
-      </select>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <label style={styles.label}>Email:</label>
+          id="role"
+          value={userType}
+          onChange={(e) => setUserType(e.target.value)}
+          style={styles.select}
+        >
+          <option value="patient">Patient</option>
+          <option value="doctor">Doctor</option>
+          <option value="admin">Admin</option>
+        </select>
+      <form className="login-form" onSubmit={handleSubmit} style={styles.form}>
+        <label htmlFor="email" style={styles.label}>Email:</label>
         <input
           type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleInputChange}
+          id="email"
+          value={email}
+          onChange={(e) => setemail(e.target.value)}
           style={styles.input}
           required
         />
-        <label style={styles.label}>Password:</label>
+
+        <label htmlFor="password" style={styles.label}>Password:</label>
         <input
           type="password"
-          name="password"
-          value={formData.password}
-          onChange={handleInputChange}
+          id="password"
+          value={password}
+          onChange={(e) => setpassword(e.target.value)}
           style={styles.input}
           required
         />
-        <button type="submit" style={styles.button}>
-          Login
-        </button>
+
+        {error && <p className="error-message">{error}</p>}        
+
+        <button type="submit" style={styles.button}>Login</button>
+        
       </form>
 
-      {/* Conditional "New user? Register" link */}
-      {(userType === "patient" || userType === "doctor") && (
-        <div style={styles.registerLink}>
-          New user? <Link to="/register">Register here</Link>
-        </div>
-      )}
+      <p className="register-link" style = {styles.registerLink} >
+        Don’t have an account?{' '}
+        <a href="/register" onClick={() => navigate('/register')}>
+          Register here
+        </a>
+      </p>
+
     </div>
   );
 };

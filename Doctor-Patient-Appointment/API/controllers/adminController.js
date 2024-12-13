@@ -1,10 +1,10 @@
 const doctorModel = require("../models/doctorModel");
-const userModel = require("../models/userModel");
+const User = require("../models/userModel");
 const appointmentModel = require("../models/appointmentModel");
 
 const getAllUsersController = async (req, res) => {
   try {
-    const users = await userModel.find({});
+    const users = await User.find({});
     res.status(200).send({
       success: true,
       message: "Users data list",
@@ -46,9 +46,9 @@ const changeAccountStatusController = async (req, res) => {
     const { doctorId, status } = req.body;
     const doctor = await doctorModel.findByIdAndUpdate(doctorId, { status });
     console.log(doctor);
-    const user = await userModel.findOne({ _id: doctor.userId });
-    user.isDoctor = status === "approved" ? true : false;
-    await user.save();
+    // const user = await userModel.findOne({ _id: doctor.userId });
+    // user.isDoctor = status === "approved" ? true : false;
+    // await user.save();
     res.status(201).send({
       success: true,
       message: "Account Status Updated",
@@ -64,8 +64,21 @@ const changeAccountStatusController = async (req, res) => {
   }
 };
 
+const deleteDoctor = async (req, res) => {
+  try {
+    const {id} = req.params
+    const deletedEvent = await doctorModel.findOneAndDelete({ _id:id });
+    res.status(200).json({ message: 'Doctor deleted successfully',
+      data: deletedEvent
+     });
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+};
+
 module.exports = {
   getAllDoctorsController,
   getAllUsersController,
   changeAccountStatusController,
+  deleteDoctor
 };
