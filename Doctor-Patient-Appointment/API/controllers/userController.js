@@ -179,9 +179,14 @@ const getAllDocotrs = async (req, res) => {
 //Book Appointment
 const bookeAppointmnet = async (req, res) => {
   try{
+    console.log("APPOINTMENT",req.body)
   const newAppointment = new appointmentModel(req.body);
   newAppointment.appointmentId = newAppointment._id;
-  newAppointment.doctorId = '';
+  // newAppointment.doctorId = '';
+  const timeSlot = req.body.timeSlot
+  const [date, timeRange] = timeSlot.split(" ")
+  newAppointment.date = date
+  newAppointment.time = timeRange
 
   await newAppointment.save();
   res.status(200).send({

@@ -49,6 +49,9 @@ const appointmentSchema = new mongoose.Schema(
     insurance: {
       type: Boolean,
     },
+    timeSlot:{
+      type: String,
+    },
     brief: {
       type: String
     },
