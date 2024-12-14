@@ -364,9 +364,9 @@ const gettimeSlotController = async (req, res) => {
       // const userId = req.body.userId
       // const time = req.body.time
     
-      const userId = req.params.id;
+      // const userId = req.params.id;
 
-      console.log("USERID" , userId)
+      // console.log("USERID" , userId)
       const timeSlot = await timeSlotModel.find();
       
       console.log("timeSlot", timeSlot)

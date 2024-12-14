@@ -44,9 +44,9 @@ router.post("/timeSlot",  timeSlotController);
 router.post("/login",  login);
 
 //Get Time Slot
-// router.get("/timeSlot", gettimeSlotController)
+router.get("/timeSlot", gettimeSlotController)
 
-router.get("/timeSlot/:id", gettimeSlotControllerID)
+// router.get("/timeSlot/:id", gettimeSlotControllerID)
 
 router.post("/medication",medication);
 

@@ -48,6 +48,7 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ isOpen, onClose }) =>
   const [selectedDoctor, setSelectedDoctor] = useState<string>("");
   const [filteredTimeSlots, setFilteredTimeSlots] = useState<TimeSlot[]>([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("");
+  const [did,setdid] = useState<string>()
   // const [doctorInfo,setdoctorInfo] = useState<string>()
 
   const navigate = useNavigate();
@@ -87,6 +88,7 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ isOpen, onClose }) =>
     // console.log("DOCTORID",doctorId)
     // Filter time slots for the selected doctor
     const doctorID = doctors.filter((slot) => slot.firstName === doctorId)[0]
+    setdid(doctorID.userId)
     // console.log("FILTERED DOCTOR INFO", doctorID)
     const doctorTimeSlots = timeSlots.filter((slot) => slot.userId === doctorID.userId)
     setSelectedDoctor(doctorId);
@@ -110,11 +112,10 @@ const BookAppointment: React.FC<BookAppointmentProps> = ({ isOpen, onClose }) =>
     const appointmentData = {
       userId : localStorage.getItem("userId"),
       breif,
-      doctorId: selectedDoctor,
       timeSlot: selectedTimeSlot,
-      doctorInfo: selectedDoctor
+      doctorInfo: selectedDoctor,
+      did
     };
-
     console.log("APPOINT", appointmentData)
 
 
