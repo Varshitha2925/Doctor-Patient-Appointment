@@ -1,55 +1,13 @@
-// // src/App.tsx
-// import React from 'react';
-// // import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-// // import DoctorDashboard from './components/DoctorDashboard';
-// // import DoctorProfileModal from './components/DoctorProfileModal';
-// // import TimeSlotModal from './components/TimeSlotModal';
-// import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
-// import './App.css';
-// import PatientDashboard from './components/user/PatientDashboard';
 
-
-// const App: React.FC = () => {
-//   return (
-//     // <Router>
-//     //   <Routes>
-//     //     <Route path="/" element={<DoctorDashboard />} />
-//     //     <Route path="/doctor-profile" element={<DoctorProfileModal isOpen={false} onClose={function (): void {
-//     //       throw new Error('Function not implemented.');
-//     //     } } />} />
-//     //     <Route path="/time-slots" element={<TimeSlotModal isOpen={false} onClose={function (): void {
-//     //       throw new Error('Function not implemented.');
-//     //     } } />} />
-//     //   </Routes>
-//     // </Router>
-//     <Router>
-//       <div className="App">
-//         <header className="App-header">
-//           <h1>Doctor Appointment Management System</h1>
-//         </header>
-
-//         <Routes>
-//           {/* Home or default route */}
-//           <Route path="/" element={<h2>Welcome to the Healthcare System</h2>} />
-
-//           {/* Patient Dashboard route */}
-//           <Route path="/patient-dashboard" element={<PatientDashboard />} />
-          
-//           {/* Additional routes could be added here, e.g., AdminDashboard, DoctorDashboard, etc. */}
-//         </Routes>
-//       </div>
-//     </Router>
-//   );
-// };
-
-// export default App;
-// src/App.tsx
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 import AdminDashboard from './components/admin';
 import DoctorDashboard from './components/doctor/DoctorDashboard';
+import LoginPage from './components/login';
+import NurseDashboard from './components/NurseDashboard';
 import RegistrationPage from './components/registration';
 import PatientDashboard from './components/user/PatientDashboard';
+import PaymentPage from './components/user/Payment';
 
 const App: React.FC = () => {
   return (
@@ -57,11 +15,13 @@ const App: React.FC = () => {
       <div className="App">
         <h1>Doctor-Patient Appointment</h1>
         <Routes>
-          <Route path="/" element={<AdminDashboard />} />
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/nurse-dashboard" element={<NurseDashboard />} />
           <Route path="/register" element={<RegistrationPage />} />
           <Route path="/dashboard" element={<PatientDashboard />}/>
           <Route path="/doctor-dashboard" element={<DoctorDashboard />}/>
-
+          <Route path="/payment/:appointmentId" element={<PaymentPage />} />
         </Routes>
       </div>
     </Router>

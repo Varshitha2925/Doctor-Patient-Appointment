@@ -8,6 +8,9 @@ import { Appointment } from './types';
 const DoctorAppointments: React.FC = ({ }) => {
   const [appointment, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isPopupVisible, setPopupVisible] = useState(false);
+  const [medication, setmedication] = useState('Sleep')
+  const [appointmentid , setappointmentid] = useState('')
   useEffect(() => {
   fetchAppointments();
   }, []);
@@ -23,6 +26,9 @@ const DoctorAppointments: React.FC = ({ }) => {
     }
   };
   const onAccept = async(appointmentid:any) => {
+
+    setPopupVisible(true);
+    setappointmentid(appointmentid)
     const status = "approved"
     try {
       const response = await axios.post(`http://localhost:3000/api/doctor/update-status`,{
@@ -56,6 +62,22 @@ const DoctorAppointments: React.FC = ({ }) => {
     }
     fetchAppointments();
   }
+  const postMedication =async () => {
+    try {
+      const response = await axios.post(`http://localhost:3000/api/doctor/medication`,{
+        "appointmentid":appointmentid,
+        "medication": medication
+      });
+      // setAppointments(response.data.data);
+      setappointmentid('')
+      setmedication('')
+      setPopupVisible(false);
+      console.log("DATA:\n",response.data.data)
+    } catch (error) {
+      console.error('Error fetching appointments:', error);
+    }
+  }
+  const handlePopupClose = () => setPopupVisible(false);
   return (
     <div className="appointments-section">
       <h3>Appointments</h3>
@@ -65,8 +87,9 @@ const DoctorAppointments: React.FC = ({ }) => {
             <th>Patient Name</th>
             <th>Date</th>
             <th>Time</th>
-            <th>Status</th>
-            <th>Actions</th>
+            <th>Prescription</th>
+            {/* <th>Status</th>
+            <th>Actions</th> */}
           </tr>
         </thead>
         <tbody>
@@ -76,24 +99,43 @@ const DoctorAppointments: React.FC = ({ }) => {
               <td>{appointment.userInfo}</td>
               <td>{appointment.date}</td>
               <td>{appointment.time}</td>
-              <td>{appointment.status}</td>
-              <td>
+              <td><button onClick={() => onAccept(appointment._id)}>Medication</button></td>
+              
+              {/* <td>{appointment.status}</td> */}
+              {/* <td> */}
                 
                   {/* <button onClick={() => onAccept(appointment.id)}>Accept{appointment.id}</button> */}
-                {appointment.status === 'pending' && (
+                {/* {appointment.status === 'pending' && (
                   <>
                     <button onClick={() => onAccept(appointment._id)}>Accept</button>
-                    {/* <button onClick={() => onCancel(appointment.id)}>Cancel</button> */}
                   </>
-                )}
-                {appointment.status === 'approved' && (
+                )} */}
+                {/* {appointment.status === 'approved' && (
                   <button onClick={() => onCancel(appointment._id)}>Cancel</button>
-                )}
-              </td>
+                )} */}
+              {/* </td> */}
             </tr>
           ))}
         </tbody>
       </table>
+      {isPopupVisible && (
+        <div className="popup-overlay" onClick={handlePopupClose}>
+          <div
+            className="popup-container"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the popup
+          >
+            <h2>Medication</h2>
+            <input type= "text" value={medication} onChange={(e)=>setmedication(e.target.value)}>{}</input>
+            
+            <button className="close-popup-button" onClick={handlePopupClose}>
+              Close
+            </button>
+            <button className="close-popup-button" onClick={postMedication}>
+              Post
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

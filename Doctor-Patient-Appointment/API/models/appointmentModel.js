@@ -51,6 +51,9 @@ const appointmentSchema = new mongoose.Schema(
     },
     brief: {
       type: String
+    },
+    paid: {
+      type: String
     }
   },
   { timestamps: true }

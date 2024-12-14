@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './admin.css';
 
 interface User {
@@ -67,10 +68,16 @@ const AdminDashboard: React.FC = () => {
     }
     fetchDoctors()
   };
+  const navigate = useNavigate();
+  const logOut = () => {
+    navigate('/')
+  }
 
 
   return (
+   
     <div className="admin-dashboard">
+      <button onClick={logOut} className="logout-btn">Log Out</button>
       <h1>Admin Dashboard</h1>
       <div className="tabs">
         <button

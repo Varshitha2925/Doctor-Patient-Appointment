@@ -18,6 +18,7 @@ export interface Doctor {
   }
   
   export interface Appointment {
+    medication: ReactNode;
     appointmentId: String;
     userInfo: String;
     _id: string;

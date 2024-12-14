@@ -1,13 +1,14 @@
 const { hash } = require("bcrypt");
 const appointmentModel = require("../models/appointmentModel");
 const doctorModel = require("../models/doctorModel");
-const feedbackModel = require("../models/feedbackModel");
+       
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const userModel = require("../models/userModel");
 const moment = require("moment");
 const prescriptionModel = require("../models/prescriptionModel");
-const timeSlotModel = require("../models/timeSlot")
+const timeSlotModel = require("../models/timeSlot");
+
 
 const login = async (req, res) => {
   
@@ -17,7 +18,8 @@ const login = async (req, res) => {
     res.status(400);
     throw new Error("All fields are mandatory");
   }
-  const user = await doctorModel.findOne({ email }).where(verified = 'true');
+  const user = await doctorModel.findOne({ email });
+  user.userId = user._id
   console.log("USER" , user)
 
   //compare password with hashed password
@@ -42,7 +44,14 @@ const login = async (req, res) => {
 
 const getDoctorInfoController = async (req, res) => {
   try {
-    const doctor = await doctorModel.findOne({ userId: req.body.userId });
+    const userId = req.body.id
+    console.log("USERID" , userId)
+    // const doctor = await doctorModel.findOne({ userId: userId});
+    const doctor = await doctorModel.findOne(
+      { userId: userId },
+      
+    );
+    console.log("DOCTOR",doctor)
     res.status(200).send({
       success: true,
       message: "doctor data fetch success",
@@ -155,6 +164,57 @@ const doctorAppointmentsController = async (req, res) => {
 //   }
 // };
 
+const medication = async (req,res) => {
+  try {
+    const medication = await prescriptionModel.create(
+      req.body
+    );
+    const appointment = await appointmentModel.findOne({
+      appointmentId: req.body.appointmentid,
+      
+    })
+    appointment.medication = req.body.medication
+    await appointment.save()
+    await medication.save()
+
+    res.status(200).send({
+      success: true,
+      message: "Appointment Status Updated",
+      data: medication,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error In Update Status",
+    });
+  }
+}
+const getmedication = async (req,res) => {
+  try {
+    const medication = await prescriptionModel.findOne(
+      req.body
+    );
+
+    
+    // await medication.save()
+
+    res.status(200).send({
+      success: true,
+      message: "Appointment Status Updated",
+      data: medication,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error In Update Status",
+    });
+  }
+}
+
 const updateStatusController = async (req, res) => {
   try {
 
@@ -265,6 +325,7 @@ const postMedication = async (req, res) => {
     });
   }
 };
+
 const timeSlotController = async (req, res) => {
   try {
     // const userId = req.body.userId
@@ -302,13 +363,10 @@ const gettimeSlotController = async (req, res) => {
       // const userId = req.body.userId
       // const time = req.body.time
     
-      const userId= req.params.id;
+      const userId = req.params.id;
 
       console.log("USERID" , userId)
-      const timeSlot = await timeSlotModel.findOne(
-        { userId: userId },
-        
-      );
+      const timeSlot = await timeSlotModel.find();
       
       console.log("timeSlot", timeSlot)
       res.status(200).send({
@@ -324,6 +382,32 @@ const gettimeSlotController = async (req, res) => {
         message: "Error In Updating Comments",
       });
     }
+}
+
+const gettimeSlotControllerID = async (req, res) => {
+  try {
+    // const userId = req.body.userId
+    // const time = req.body.time
+  
+    const userId = req.params.id;
+
+    console.log("USERID" , userId)
+    const timeSlot = await timeSlotModel.findOne({"userId":userId});
+    
+    console.log("timeSlot", timeSlot)
+    res.status(200).send({
+      success: true,
+      message: "Comment Updated Successfully",
+      data: timeSlot,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      error,
+      message: "Error In Updating Comments",
+    });
+  }
 }
 
 const removetimeSlotController = async (req, res) => {
@@ -370,5 +454,8 @@ module.exports = {
   timeSlotController,
   login,
   gettimeSlotController,
-  removetimeSlotController
+  removetimeSlotController,
+  medication,
+  getmedication,
+  gettimeSlotControllerID
 };

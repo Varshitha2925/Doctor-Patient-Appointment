@@ -39,8 +39,9 @@ const LoginPage: React.FC = () => {
           email,
           password,
         });
+        console.log("email",{email,password})
         localStorage.setItem('userId', response.data.user._id);
-  
+
         console.log("response",response)
         navigate('/dashboard');
         if (response.statusText === "OK") {
@@ -63,11 +64,12 @@ const LoginPage: React.FC = () => {
         });
   
         console.log("response",response)
+        localStorage.setItem('userId', response.data.user._id); // Save token to local storage
+        navigate('/doctor-dashboard'); 
   
         if (response.statusText === "OK") {
           console.log('Login successful');
-          localStorage.setItem('userId', response.data.user._id); // Save token to local storage
-          navigate('/doctor-dashboard'); // Redirect to user/organizer dashboard
+          // Redirect to user/organizer dashboard
         } else {
           seterror('Admin has not approved yet....!')
           // setError(response.data.message || 'Login failed');
@@ -78,30 +80,7 @@ const LoginPage: React.FC = () => {
     
     }
     else if(userType === "nurse"){
-      try {
-        const response = await axios.post('http://localhost:3000/api/users/login', {
-          email,
-          password,
-        });
-
-        console.log("response",response)
-
-        if (response.statusText === "OK") {
-          console.log('Login successful');
-          localStorage.setItem('organizerId', response.data.user._id); // Save token to local storage
-          if(response.data.status == "approved"){
-
-          }
-          else{
-          navigate('/'); 
-          }// Redirect to user/organizer dashboard
-        } else {
-          // setError(response.data.message || 'Login failed');
-        }
-      } catch (err: any) {
-        // setError(err.response?.data?.message || 'An error occurred. Please try again.');
-        // console.error('Login error:', err);
-      }
+      navigate('/nurse-dashboard')
     
     }
     else{
@@ -121,6 +100,7 @@ const LoginPage: React.FC = () => {
         >
           <option value="patient">Patient</option>
           <option value="doctor">Doctor</option>
+          <option value="nurse">Nurse</option>
           <option value="admin">Admin</option>
         </select>
       <form className="login-form" onSubmit={handleSubmit} style={styles.form}>

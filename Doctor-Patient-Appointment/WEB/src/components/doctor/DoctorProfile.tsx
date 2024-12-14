@@ -5,7 +5,7 @@ import './DoctorProfile.css';
 import UpdateDoctorProfile from './DoctorProfileForm';
 
 export interface DoctorProfile {
-  userId: string;
+  // userId: string;
   firstName: string;
   lastName: string;
   phone: string;
@@ -20,7 +20,7 @@ export interface DoctorProfile {
 }
 const DoctorProfile: React.FC<DoctorProfile> = ({}) => {
   const [doctorProfile, setDoctorProfile] = useState<DoctorProfile>({
-    userId: '643fbc9ecab1ed35f0534e6a',
+    // userId: '',
     firstName: '',
     lastName: '',
     phone: '',
@@ -34,15 +34,17 @@ const DoctorProfile: React.FC<DoctorProfile> = ({}) => {
     timings: [],
   });
   const [isBookingOpen, setIsBookingOpen] = useState(false);
+  const userId = localStorage.getItem("userId");
+  console.log("USERID",userId)
   useEffect(() => {
     // Fetch the existing doctor profile
     const fetchDoctorProfile = async () => {
       try {
         const response = await axios.post(
           'http://localhost:3000/api/doctor/getDoctorInfo',
-          {
-            userId: '643fbc9ecab1ed35f0534e6a',
-          }
+          
+            {id :userId}
+
         );
         setDoctorProfile(response.data.data);
       } catch (error) {

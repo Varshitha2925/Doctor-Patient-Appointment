@@ -30,6 +30,7 @@ const DoctorAvailability: React.FC = () => {
   };
 
   const userId = localStorage.getItem("userId");
+  console.log('USER ID',userId)
 
   const getTimeSlot = async() =>{
     try {

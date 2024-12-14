@@ -4,17 +4,27 @@ const userSchema = mongoose.Schema(
   {
     username: {
       type: String,
-      required: [true, "Please add the user name"],
+      
     },
     email: {
       type: String,
-      required: [true, "Please add the user email address"],
-      unique: [true, "Email address already taken"],
+      
     },
     password: {
       type: String,
-      required: [true, "Please add the user password"],
+     
     },
+    city: {
+      type: String,
+      
+    },
+    state: {
+      type: String,
+    },
+    zipcode:{
+      type:String,
+    }
+
   },
   {
     timestamps: true,

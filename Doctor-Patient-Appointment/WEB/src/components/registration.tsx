@@ -23,12 +23,25 @@ interface Doctor {
 }
 
 const RegistrationPage: React.FC = () => {
+  
   const [userType, setUserType] = useState<string>("patient");
-  const [formData, setFormData] = useState<Partial<Patient & Doctor>>({
-    username: "",
-    email: "",
-    password: "",
+  const [formData, setFormData] = useState<Doctor>({
+  firstName: "",
+  lastName: "",
+  password: "",
+  phone: "",
+  email: "",
+  address: "",
+  specialization: [],
+  experience: "",
+  feesPerConsultation: 0,
+  timings: [],
   });
+
+  const [username, setusername] = useState<string>();
+  const [email, setemail] = useState<string>();
+  const [password, setpassword] = useState<string>();
+
   const navigate = useNavigate();
 
   const handleInputChange = (
@@ -44,8 +57,12 @@ const RegistrationPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if(userType == "Patient"){
-      await axios.post(`http://localhost:3000/api/users/register`, formData)
+    if(userType == "patient"){
+      await axios.post(`http://localhost:3000/api/users/register`, {
+        username,
+        email,
+        password
+      })
     console.log("Submitted Data: ", formData);
     navigate('/');
     }
@@ -77,8 +94,8 @@ const RegistrationPage: React.FC = () => {
             <input
               type="text"
               name="username"
-              value={formData.username || ""}
-              onChange={handleInputChange}
+              value={username || ""}
+              onChange={(e)=>{setusername(e.target.value)}}
               style={styles.input}
               required
             />
@@ -86,8 +103,8 @@ const RegistrationPage: React.FC = () => {
             <input
               type="email"
               name="email"
-              value={formData.email || ""}
-              onChange={handleInputChange}
+              value={email || ""}
+              onChange={(e)=>{setemail(e.target.value)}}
               style={styles.input}
               required
             />
@@ -95,8 +112,8 @@ const RegistrationPage: React.FC = () => {
             <input
               type="password"
               name="password"
-              value={formData.password || ""}
-              onChange={handleInputChange}
+              value={password || ""}
+              onChange={(e)=>{setpassword(e.target.value)}}
               style={styles.input}
               required
             />

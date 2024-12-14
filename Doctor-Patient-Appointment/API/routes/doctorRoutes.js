@@ -9,7 +9,9 @@ const {
   postMedication,
   timeSlotController,
   login,
-  gettimeSlotController
+  gettimeSlotController,medication,
+  getmedication,
+  gettimeSlotControllerID
 } = require("../controllers/doctorController");
 const validateToken = require("../middlewares/validateTokenHandler");
 const router = express.Router();
@@ -42,7 +44,13 @@ router.post("/timeSlot",  timeSlotController);
 router.post("/login",  login);
 
 //Get Time Slot
-router.get("/timeSlot/:id", gettimeSlotController)
+router.get("/timeSlot", gettimeSlotController)
+
+router.get("/timeSlot/:id", gettimeSlotControllerID)
+
+router.post("/medication",medication);
+
+router.post("/getmedication",getmedication)
 
 
 module.exports = router;

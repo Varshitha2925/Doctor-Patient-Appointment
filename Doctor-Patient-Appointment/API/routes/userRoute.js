@@ -4,7 +4,6 @@ const {
   registerUser,
   loginUser,
   currentUser,
-  isInsurance,
 } = require("../controllers/userController");
 
 const validateToken = require("../middlewares/validateTokenHandler");
@@ -17,7 +16,8 @@ const {
   userAppointments,
   downloadMedication,
   cancelAppointment,
-  assigndoctor,reschedule
+  paymentController,
+  assigndoctor,reschedule,nurseAppointments
 } = require("../controllers/userController");
 
 //router onject
@@ -45,14 +45,14 @@ router.post("/book-appointment", bookeAppointmnet);
 //Appointments List
 router.get("/user-appointments", userAppointments);
 
+//Appointments List
+router.get("/nurse-appointments", nurseAppointments);
+
 //Check Availability
 router.get("/checkAvailability", bookingAvailability);
 
 //Medication Download
 router.get("/medicationDownload", downloadMedication);
-
-//Insuarance
-router.get("/insurance", isInsurance);
 
 //Cancel Appointment
 router.delete("/appointment/:id", cancelAppointment);
@@ -62,5 +62,8 @@ router.post("/assign-doctor", assigndoctor);
 
 //assign doctor
 router.post("/reschedule", reschedule);
+
+//payment
+router.post('/payment',paymentController)
 
 module.exports = router;

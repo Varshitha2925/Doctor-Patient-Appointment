@@ -1,0 +1,93 @@
+/* Payment Page Container */
+.payment-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, #f3e7e9, #e3eeff);
+    font-family: 'Roboto', sans-serif;
+    padding: 20px;
+  }
+  
+  /* Payment Form Container */
+  .payment-form-container {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  .payment-form-container h1 {
+    color: #4ca2cd;
+    margin-bottom: 15px;
+  }
+  
+  .payment-form-container p {
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  /* Payment Form */
+  .payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .payment-form label {
+    text-align: left;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .payment-form input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+  }
+  
+  .payment-form input:focus {
+    border-color: #4ca2cd;
+    box-shadow: 0 0 4px rgba(76, 162, 205, 0.4);
+  }
+  
+  /* Pay Now Button */
+  .pay-button {
+    background: linear-gradient(to right, #67b26f, #4ca2cd);
+    color: white;
+    border: none;
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .pay-button:hover {
+    background: linear-gradient(to right, #5aa562, #3f91b3);
+  }
+  
+  /* Success Message */
+  .success-message {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .success-message h1 {
+    color: #67b26f;
+    margin-bottom: 10px;
+  }
+  
+  .success-message p {
+    color: #333;
+  }
+  

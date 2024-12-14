@@ -7,10 +7,12 @@ const appointmentModel = require("../models/appointmentModel");
 const moment = require("moment");
 const logger = require("../controllers/logger");
 const prescriptionModel = require("../models/prescriptionModel");
-const insuranceModel = require("../models/insuranceModel")
+// const insuranceModel = require("../models/insuranceModel")
+const paymentModel = require("../models/payment")
 // const sendEmail = require("./nodeMail");
 
 const nodemailer = require("nodemailer");
+const payment = require("../models/payment")
 
 // Function to send the email
 const sendEmail = async (toEmail, subject, content) => {
@@ -43,7 +45,7 @@ const sendEmail = async (toEmail, subject, content) => {
 
 const fs = require("fs");
 const PDFDocument = require("pdfkit");
-const feedbackModel = require("../models/feedbackModel");
+
 
 //@desc Register a User
 //@routw POST /api/users/register
@@ -51,6 +53,7 @@ const feedbackModel = require("../models/feedbackModel");
 
 const registerUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
+  // console.log("REQ BODY" , req.body)
   if (!username || !email || !password) {
     res.status(400);
     throw new Error("All fields are mandatory");
@@ -68,6 +71,9 @@ const registerUser = asyncHandler(async (req, res) => {
     username,
     email,
     password: hashedPassword,
+    city, 
+    state,
+    zipcode
   });
 
   console.log(`User Created ${user}`);
@@ -82,13 +88,17 @@ const registerUser = asyncHandler(async (req, res) => {
 //@routw POST /api/users/login
 //@access public
 
-const loginUser = asyncHandler(async (req, res) => {
+
+const loginUser = async (req, res) => {
+  
   const { email, password } = req.body;
+  console.log("Login creds", email)
   if (!email || !password) {
     res.status(400);
     throw new Error("All fields are mandatory");
   }
   const user = await User.findOne({ email });
+
   //compare password with hashed password
   if (user && (await bcrypt.compare(password, user.password))) {
     const accessToken = jwt.sign(
@@ -102,15 +112,12 @@ const loginUser = asyncHandler(async (req, res) => {
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "10h" }
     );
-    res.status(200).json({ accessToken });
-    logger.customerLogger.log("info", "Successfully logged in");
+    res.status(200).json({user});
   } else {
     res.status(401);
-    logger.customerLogger.log("error", "Error in logging user");
     throw new Error("email or password is not valid");
   }
-  //   res.json({ message: "Login user" });
-});
+  }
 
 //@desc Current User Info
 //@route POST /api/users/currentUser
@@ -151,12 +158,6 @@ const getAllDocotrs = async (req, res) => {
     
     const doctors = await doctorModel
       .find({})
-      // .where("specialization")
-      // .in([...specialization])
-      // .where("experience")
-      // .in(experience)
-      // .sort({ feesPerCunsaltation: sort });
-    
     res.status(200).send({
       success: true,
       message: "Doctors Lists Fetched Successfully",
@@ -171,13 +172,14 @@ const getAllDocotrs = async (req, res) => {
     });
   }
 };
+
 //Book Appointment
 const bookeAppointmnet = async (req, res) => {
   try{
   const newAppointment = new appointmentModel(req.body);
   newAppointment.appointmentId = newAppointment._id;
-  // newPrescription.doctorId = req.body.doctorId;
-  // newPrescription.userId = req.body.userId;
+  newAppointment.doctorId = '';
+
   await newAppointment.save();
   res.status(200).send({
   success: true,
@@ -260,24 +262,6 @@ const bookeAppointmnet = async (req, res) => {
 //   }
 // };
 
-const isInsurance = async(req, res) => {
-  try{
-    const insurance = new insuranceModel(req.body);
-    await insurance.save();
-    res.status(200).send({
-      success: true,
-      message: "Insurance recorded successfully",
-      data: insurance,
-    });
-  } catch (error){
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      error,
-      message: "Error in creating Insurance record",
-    });
-  }
-}
 
 // booking bookingAvailabilityController
 const bookingAvailability = async (req, res) => {
@@ -321,23 +305,11 @@ const userAppointments = async (req, res) => {
   try {
     let array = [];
     const appointments = await appointmentModel.find({});
-    appointments.forEach(async (record) => {
-      let date = new Date(record.appointmentTime[0]);
-      // console.log(String(date.getMonth()));
-      if (
-        String(date.getMonth() + 1) == req.query.month &&
-        req.query.month != "undefined"
-      ) {
-        array.push(record);
-      } else {
-        array = appointments;
-      }
-      // console.log(record.date);
-    });
+    
     res.status(200).send({
       success: true,
       message: "Users Appointments Fetch SUccessfully",
-      data: array,
+      data: appointments,
     });
   } catch (error) {
     console.log(error);
@@ -348,6 +320,8 @@ const userAppointments = async (req, res) => {
     });
   }
 };
+
+
 
 //generating PDF for medication
 const downloadMedication = async (req, res) => {
@@ -417,6 +391,7 @@ const downloadMedication = async (req, res) => {
   }
 };
 
+
 //Cancel Appointment
 const cancelAppointment = async (req, res) => {
   try {
@@ -438,15 +413,21 @@ const cancelAppointment = async (req, res) => {
   }
 };
 
-//Cancel Appointment
+//Assign Appointment
 const assigndoctor = async (req, res) => {
   try {
     // const {id , doctorName} = req.body
+    console.log("req.body",req.body)
     const id = req.body.appointmentId
-    const doctorName = req.body.doctorId
+    const doctorId = req.body.doctorId
+    const date = req.body.date
+    const time = req.body.starttime
+    
     console.log(id)
     const appointments = await appointmentModel.findById(id);
-    appointments.doctorInfo = doctorName
+    appointments.doctorId = doctorId
+    appointments.date = date
+    appointments.time = time
     await appointments.save()
     
     res.status(200).send({
@@ -490,6 +471,67 @@ const reschedule = async (req, res) => {
   }
 };
 
+const nurseAppointments = async (req, res) => {
+  try {
+    let array = [];
+    const appointments = await appointmentModel.find()
+    
+      
+    res.status(200).send({
+      success: true,
+      message: "Users Appointments Fetch SUccessfully",
+      data: appointments,
+    });
+  } catch (error) {
+    console.log(error);
+    
+  }
+};
+
+const paymentController = async (req, res) => {
+  try {
+    const { appointmentId, cardNumber, expiryDate, cvv, amount } = req.body;
+    // const booking = await Booking.findByIdAndUpdate(bookingId, {
+    //   booking_status:"confirmed"
+    // });
+    // const event = await Event.findOne({id:booking.eventId})
+    // event.ticketSold = event.ticketSold + booking.no_of_tickets
+    // await event.save()
+    // const paymentStatus = 'success'; 
+    const payment = new paymentModel({
+      appointmentId,
+      cardNumber: cardNumber.slice(-4), 
+      expiryDate,
+      amount,
+      // status: paymentStatus,
+    });
+    await payment.save();
+
+    const appointment = await appointmentModel.findOne({"appointmentId":appointmentId})
+    appointment.paid = "paid";
+    await appointment.save()
+
+    res.status(200).json({ message: 'Payment successful', payment });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Payment processing failed' });
+  }
+};
+const getpayment = async(req, res) => {
+  try{
+    const payment = await paymentModel.findOne({
+      appointmentId
+    });
+    res.status(200).json({ message: 'Payment successful', payment });
+
+
+
+  }catch(error){
+    console.error(error);
+    res.status(500).json({ message: 'Payment processing failed' });
+  }
+}
+
 
 
 module.exports = {
@@ -502,8 +544,11 @@ module.exports = {
   userAppointments,
   bookingAvailability,
   downloadMedication,
-  isInsurance,
+ 
   cancelAppointment,
   assigndoctor,
-  reschedule
+  reschedule,
+  nurseAppointments,
+  paymentController,
+  getpayment
 };

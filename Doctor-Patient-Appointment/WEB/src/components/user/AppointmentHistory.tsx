@@ -1,13 +1,18 @@
 // src/components/AppointmentHistory.tsx
 import axios from 'axios';
 import React, { ReactNode, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './AppointmentHistory.css';
 
+
 interface Appointment {
+  paid: any;
+  medication: any;
+  doctorId: ReactNode;
   doctorInfo: ReactNode;
   prescription: any;
   type: ReactNode;
-  time: ReactNode;
+  time: any;
   appointmentId: any;
   id: string;
   doctorName: string;
@@ -22,7 +27,8 @@ const AppointmentHistory: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [time, settime] = useState<boolean>()
 
-  
+  const userId = localStorage.getItem("userId");
+  console.log("USERID",userId)
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
@@ -34,7 +40,12 @@ const AppointmentHistory: React.FC = () => {
       } finally {
         setLoading(false);
       }
+      
+    
     };fetchAppointments();
+
+    
+    
   }, []);
 
   const handleReschedule = async (appointmentId: string) => {
@@ -65,10 +76,26 @@ const AppointmentHistory: React.FC = () => {
     console.log(`Cancelling appointment: ${appointmentId}`);
   };
 
-  const handleDownloadPrescription = (appointmentId: string) => {
-    console.log(`Downloading prescription for appointment: ${appointmentId}`);
-  };
+  const handleDownloadPrescription = async (appointmentId: string) => {
+    
+      try {
+        const response = await axios.get(`http://localhost:3000/api/doctor/medication/${appointmentId}`);
+        // setAppointments(response.data.data);
 
+        
+        // setPopupVisible(false);
+        console.log("DATA:\n",response.data.data)
+      } catch (error) {
+        console.error('Error fetching appointments:', error);
+      }
+    
+  };
+  const navigate = useNavigate();
+
+  const handlepayment= async(appointmentId:any) => {
+    console.log("appoint", appointmentId)
+    navigate(`/payment/${appointmentId}`)
+  }
   console.log("Appointments",appointments)
 
   return (
@@ -81,31 +108,29 @@ const AppointmentHistory: React.FC = () => {
             <th>Date</th>
             <th>Time</th>
             <th>Actions</th>
-            <th>Status</th>
+            
             <th>Prescription</th>
+            <th>Payment</th>
           </tr>
         </thead>
         <tbody>
           {appointments.length > 0 ? (
             appointments.map((appointment) => (
               <tr key={appointment.appointmentId}>
-                <td>{appointment.doctorInfo}</td>
-                <td>{appointment.date}</td>
-                <td>{appointment.time}</td>
+                <td>{appointment.doctorId ? appointment.doctorId : "NA"}</td>
+                <td>{appointment.date? appointment.date : "NA"}</td>
+                <td>{appointment.time? appointment.time : "NA"}</td>
                 <td>
-                <button onClick={() => handleReschedule(appointment.appointmentId)}>Reschedule</button>
+                {/* <button onClick={() => handleReschedule(appointment.appointmentId)}>Reschedule</button> */}
                 <button onClick={() => handleCancel(appointment.appointmentId)}>Cancel</button>
                 </td>
-                <td>{appointment.status}</td>
+                
                 <td>
-                  {appointment.prescription ? (
-                    <a href={appointment.prescription} download>
-                      Download
-                    </a>
-                  ) : (
-                    'Not Available'
-                  )}
+                  {appointment.medication ? appointment.medication:"NA"}
                 </td>
+                
+                <button onClick={() => handlepayment(appointment.appointmentId)} disabled={appointment.paid}>Pay</button>
+                
               </tr>
             ))
           ) : (
