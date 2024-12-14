@@ -9,15 +9,27 @@ const DoctorAppointments: React.FC = ({ }) => {
   const [appointment, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [isPopupVisible, setPopupVisible] = useState(false);
+  const [isCommVisible, setisCommVisible] = useState(false);
   const [medication, setmedication] = useState('Sleep')
+  const [comments, setcomment] = useState('')
   const [appointmentid , setappointmentid] = useState('')
+  const userId = localStorage.getItem("userId");
+  console.log("USERID",userId)
+
+
   useEffect(() => {
   fetchAppointments();
   }, []);
+
   const fetchAppointments = async () => {
     try {
+      
       const response = await axios.get(`http://localhost:3000/api/doctor/doctor-appointments`);
-      setAppointments(response.data.data);
+      const appointments = response.data.data
+      // 
+      const filtered = appointments.filter((appointment:any) => appointment.doctorId === userId);
+        console.log("FILTERED APP", filtered)
+        setAppointments(filtered);
       console.log("DATA:\n",response.data.data)
     } catch (error) {
       console.error('Error fetching appointments:', error);
@@ -25,6 +37,12 @@ const DoctorAppointments: React.FC = ({ }) => {
       setLoading(false);
     }
   };
+  const getComments = async(appointmentid:any) => {
+    setisCommVisible(true);
+    setappointmentid(appointmentid)
+    const app = appointment.filter((appointment:any) => appointment.appointmentId === appointmentid)
+    setcomment(app[0].comments)
+  }
   const onAccept = async(appointmentid:any) => {
 
     setPopupVisible(true);
@@ -88,8 +106,8 @@ const DoctorAppointments: React.FC = ({ }) => {
             <th>Date</th>
             <th>Time</th>
             <th>Prescription</th>
-            {/* <th>Status</th>
-            <th>Actions</th> */}
+            {/* {/* <th>Status</th> */}
+            <th>Comments</th> 
           </tr>
         </thead>
         <tbody>
@@ -100,6 +118,7 @@ const DoctorAppointments: React.FC = ({ }) => {
               <td>{appointment.date}</td>
               <td>{appointment.time}</td>
               <td><button onClick={() => onAccept(appointment._id)}>Medication</button></td>
+              <td><button onClick={() => getComments(appointment._id)}>Comments</button></td>
               
               {/* <td>{appointment.status}</td> */}
               {/* <td> */}
@@ -133,6 +152,23 @@ const DoctorAppointments: React.FC = ({ }) => {
             <button className="close-popup-button" onClick={postMedication}>
               Post
             </button>
+          </div>
+        </div>
+      )}
+      {isCommVisible && (
+        <div className="popup-overlay" onClick={()=>setisCommVisible(false)}>
+          <div
+            className="popup-container"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the popup
+          >
+            <h2>{comments}</h2>
+            
+            <button className="close-popup-button" onClick={()=>setisCommVisible(false)}>
+              Close
+            </button>
+            {/* <button className="close-popup-button" onClick={postMedication}>
+              Post
+            </button> */}
           </div>
         </div>
       )}

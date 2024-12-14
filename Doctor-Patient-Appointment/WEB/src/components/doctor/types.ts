@@ -27,6 +27,7 @@ export interface Doctor {
     time: string;
     status: 'pending' | 'approved' | 'cancelled';
     medicalHistory: string;
+    comments:''
   }
   
   export interface PatientRecord {

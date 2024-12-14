@@ -17,6 +17,12 @@ const DoctorAvailability: React.FC = () => {
     startTime: '',
     endTime: ''
   });
+  const [time, settime] = useState<Slot>({
+    userId:"",
+    date: '',
+    startTime: '',
+    endTime: ''
+  });
 
   useEffect(() => {
     getTimeSlot()
@@ -41,41 +47,63 @@ const DoctorAvailability: React.FC = () => {
     setNewSlot({ ...newSlot, [name]: value });
   };
 
-  console.log("New Slot" , newSlot)
+  // console.log("New Slot" , newSlot)
 
   const userId = localStorage.getItem("userId");
   console.log('USER ID',userId)
 
   const getTimeSlot = async() =>{
     try {
-      const response = await axios.get(
-        `http://localhost:3000/api/doctor/timeSlot/${userId}`,
-        
-      );
-      setSlots(response.data.data.time)
-      console.log(response.data.data.time)
+      const response = await axios.get("http://localhost:3000/api/doctor/timeSlot");
+      const timeSlots = response.data.data
+      const doctorTimeSlots = timeSlots.filter((slot:any) => slot.userId === userId)
+      // setSlots(response.data.data || []);
+      const time = doctorTimeSlots[0]
+      if(time){
+        // console.log("Time" , time.time)
+        setSlots(time.time);
+      }
+      console.log("Time Slots" , response.data.data)
     } catch (error) {
-      console.error('Error fetching doctor profile:', error);
+      console.error("Error fetching time slots:", error);
     }
+  }
+  function convertTo12HourFormat(time24: string): string {
+    const [hours, minutes] = time24.split(":").map(Number);
+    const period = hours >= 12 ? "PM" : "AM";
+    const adjustedHours = hours % 12 || 12; // Convert 0 to 12 for midnight and adjust other hours
+    console.log("HOURS", adjustedHours)
+    return `${adjustedHours}:${minutes.toString().padStart(2, "0")} ${period}`;
   }
   // Add new slot to the slots list
   const addSlot = async () => {
+    console.log("NEWSLOT" , newSlot)
+    settime({...time, date:newSlot.date})
     const endtime = calculateEndTime(newSlot.startTime)
     console.log("endtime",endtime)
+    const start = convertTo12HourFormat(newSlot.startTime)
+    const end = convertTo12HourFormat(endtime)
+    console.log("TIMES", {start,end})
+    const date = newSlot.date
 
-    setNewSlot({ ...newSlot, endTime: endtime });
-
-    if (newSlot.date && newSlot.startTime && newSlot.endTime) {
-      console.log("time",newSlot.date)
+    settime({ ...time, endTime: end });
+    settime({ ...time, startTime: start });
+    
+    postSlot(date , start , end)
+  };
+  const postSlot = async (date: any , start:any, end:any) => {
+    console.log("TIMES", {date, start , end})
+    if (date && start && end) {
+      console.log("time",time.date)
       try {
         const response = await axios.post(
           'http://localhost:3000/api/doctor/timeSlot',
           {
             userId: userId,
             time:{
-              date: newSlot.date,
-              startTime: newSlot.startTime,
-              endTime: newSlot.endTime
+              date: date,
+              startTime: start,
+              endTime: end
             }
           }
         );
@@ -89,7 +117,7 @@ const DoctorAvailability: React.FC = () => {
     } else {
       alert('Please fill in all fields');
     }
-  };
+  }
 
   // Remove slot from the list
   const removeSlot = (index: number) => {

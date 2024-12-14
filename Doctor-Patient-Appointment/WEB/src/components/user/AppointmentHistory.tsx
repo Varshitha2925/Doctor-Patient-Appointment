@@ -33,7 +33,10 @@ const AppointmentHistory: React.FC = () => {
     const fetchAppointments = async () => {
       try {
         const response = await axios.get(`http://localhost:3000/api/users/user-appointments`);
-        setAppointments(response.data.data);
+        const appointments = response.data.data
+        const filtered = appointments.filter((appointment:any) => appointment.userId === userId);
+        console.log("FILTERED APP", filtered)
+        setAppointments(filtered);
         console.log("DATA:\n",response.data.data)
       } catch (error) {
         console.error('Error fetching appointments:', error);
@@ -117,7 +120,7 @@ const AppointmentHistory: React.FC = () => {
           {appointments.length > 0 ? (
             appointments.map((appointment) => (
               <tr key={appointment.appointmentId}>
-                <td>{appointment.doctorId ? appointment.doctorId : "NA"}</td>
+                <td>{appointment.doctorInfo ? appointment.doctorInfo : "NA"}</td>
                 <td>{appointment.date? appointment.date : "NA"}</td>
                 <td>{appointment.time? appointment.time : "NA"}</td>
                 <td>

@@ -4,6 +4,8 @@ const {
   registerUser,
   loginUser,
   currentUser,
+  getTodaysAppointments,
+  updateAppointmentComments,
 } = require("../controllers/userController");
 
 const validateToken = require("../middlewares/validateTokenHandler");
@@ -31,7 +33,7 @@ router.post("/login", loginUser);
 router.post("/register", registerUser);
 
 //Auth || POST
-router.get("/currentUser", currentUser);
+router.get("/currentUser/:id", currentUser);
 
 //Apply Doctor || POST
 router.post("/apply-doctor", applyDoctor);
@@ -65,5 +67,12 @@ router.post("/reschedule", reschedule);
 
 //payment
 router.post('/payment',paymentController)
+
+//todays appointments
+router.get('/todaysappointments',getTodaysAppointments)
+
+//payment
+router.post('/updateComments',updateAppointmentComments)
+
 
 module.exports = router;

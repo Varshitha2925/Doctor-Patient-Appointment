@@ -127,7 +127,15 @@ const loginUser = async (req, res) => {
 //@access private
 
 const currentUser = asyncHandler(async (req, res) => {
-  res.json(req.user);
+  try{
+  const user = await User.findById(req.params.id);
+  console.log("USERS", user)
+
+  res.status(200).json({"data":user});
+  } catch(err) {
+    res.status(401);
+    throw new Error("email or password is not valid");
+  }
 });
 
 // Apply DOctor CTRL
@@ -187,6 +195,10 @@ const bookeAppointmnet = async (req, res) => {
   const [date, timeRange] = timeSlot.split(" ")
   newAppointment.date = date
   newAppointment.time = timeRange
+  newAppointment.doctorId = req.body.did
+  const user = await User.findById(req.body.userId);
+  console.log("USER", user)
+  newAppointment.userInfo = user.username
 
   await newAppointment.save();
   res.status(200).send({
@@ -540,6 +552,43 @@ const getpayment = async(req, res) => {
   }
 }
 
+//get todays appointments
+
+const getTodaysAppointments = async (req, res) => {
+  try {
+    const today = new Date().toISOString().split('T')[0]; // e.g., "2024-12-13"
+    console.log("TODAY DATE",today)
+    const appointments = await appointmentModel.find({
+      date: today,
+    }).sort({ time: 1 });
+    console.log("TODAY APPOINTMENTS", appointments)
+
+    res.status(200).json({ data: appointments });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch appointments" });
+  }
+};
+
+const updateAppointmentComments = async (req, res) => {
+  try {
+    const { appointmentId, comments } = req.body;
+    console.log("APPOINTMENT ID:",appointmentId)
+    console.log("COMMENTS", comments)
+    await appointmentModel.findByIdAndUpdate(
+      appointmentId,
+      { comments },
+      { new: true }
+    );
+
+
+    res.status(200).json({ message: "Comments updated successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update comments" });
+  }
+};
+
+
+
 
 
 module.exports = {
@@ -558,5 +607,6 @@ module.exports = {
   reschedule,
   nurseAppointments,
   paymentController,
-  getpayment
+  getpayment,
+  getTodaysAppointments,updateAppointmentComments
 };

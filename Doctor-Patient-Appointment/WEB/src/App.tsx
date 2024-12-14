@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import './App.css';
 import AdminDashboard from './components/admin';
 import DoctorDashboard from './components/doctor/DoctorDashboard';
 import LoginPage from './components/login';
@@ -8,7 +9,6 @@ import NurseDashboard from './components/NurseDashboard';
 import RegistrationPage from './components/registration';
 import PatientDashboard from './components/user/PatientDashboard';
 import PaymentPage from './components/user/Payment';
-
 const App: React.FC = () => {
   return (
     <Router>

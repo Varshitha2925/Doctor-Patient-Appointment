@@ -47,12 +47,15 @@ import './Payment.css';
       <div className="payment-page">
         {success ? (
           <div className="success-message">
+
             <h1>Payment Successful!</h1>
             <p>Thank you for your booking. Enjoy the event!</p>
           </div>
         ) : (
           <div className="payment-form-container">
             <h1>Payment Page</h1>
+            Total fee is : $150
+
             <p>Enter your payment details below:</p>
             <form className="payment-form" onSubmit={handlePayment}>
               <label htmlFor="name">Cardholder's Name:</label>

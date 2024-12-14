@@ -385,6 +385,8 @@ const gettimeSlotController = async (req, res) => {
     }
 }
 
+
+
 const gettimeSlotControllerID = async (req, res) => {
   try {
     // const userId = req.body.userId
@@ -394,8 +396,8 @@ const gettimeSlotControllerID = async (req, res) => {
 
     console.log("USERID" , userId)
     const timeSlot = await timeSlotModel.findOne({"userId":userId});
+
     
-    console.log("timeSlot", timeSlot)
     res.status(200).send({
       success: true,
       message: "Comment Updated Successfully",
