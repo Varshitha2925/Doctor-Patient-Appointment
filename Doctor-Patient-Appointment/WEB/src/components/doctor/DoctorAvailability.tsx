@@ -22,12 +22,26 @@ const DoctorAvailability: React.FC = () => {
     getTimeSlot()
   }, []);
 
+  const calculateEndTime = (start: string): string => {
+    const [hours, minutes] = start.split(":").map(Number);
+    const date = new Date();
+    date.setHours(hours, minutes);
+    date.setMinutes(date.getMinutes() + 15);
+
+    const endHours = date.getHours();
+    const endMinutes = date.getMinutes();
+    return `${endHours.toString().padStart(2, "0")}:${endMinutes
+      .toString()
+      .padStart(2, "0")}`;
+  };
 
   // Handle input change for new slot data
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setNewSlot({ ...newSlot, [name]: value });
   };
+
+  console.log("New Slot" , newSlot)
 
   const userId = localStorage.getItem("userId");
   console.log('USER ID',userId)
@@ -46,6 +60,11 @@ const DoctorAvailability: React.FC = () => {
   }
   // Add new slot to the slots list
   const addSlot = async () => {
+    const endtime = calculateEndTime(newSlot.startTime)
+    console.log("endtime",endtime)
+
+    setNewSlot({ ...newSlot, endTime: endtime });
+
     if (newSlot.date && newSlot.startTime && newSlot.endTime) {
       console.log("time",newSlot.date)
       try {
@@ -62,17 +81,11 @@ const DoctorAvailability: React.FC = () => {
         );
         console.log(response.data.data.time)
         
-        // setDoctorProfile(response.data.data);
+       
       } catch (error) {
         console.error('Error fetching doctor profile:', error);
       }
-      // setSlots([...slots, newSlot]);
      
-      // // console.log("Slots", slots)
-      // setNewSlot({ userId: '', date: '', startTime: '', endTime: '' }); // Clear the form
-      // console.log("NewSlot",newSlot)
-
-      // console.log("Slots", slots)
     } else {
       alert('Please fill in all fields');
     }
@@ -104,13 +117,13 @@ const DoctorAvailability: React.FC = () => {
           value={newSlot.startTime}
           onChange={handleInputChange}
         />
-        <label>End Time:</label>
+        {/* <label>End Time:</label>
         <input
           type="time"
           name="endTime"
           value={newSlot.endTime}
           onChange={handleInputChange}
-        />
+        /> */}
         <button onClick={addSlot}>Add Slot</button>
       </div>
 

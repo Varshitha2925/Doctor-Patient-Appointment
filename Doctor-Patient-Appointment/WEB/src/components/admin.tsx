@@ -59,8 +59,8 @@ const AdminDashboard: React.FC = () => {
   };
   const removeDoctor = async (doctorId: string) => {
     try {
-      const status = "approved"
-      await axios.delete(`http://localhost:3000/api/admin//deleteDoctor/${doctorId}`);
+      const status = "pending"
+      await axios.post('http://localhost:3000/api/admin/changeAccountStatus', { doctorId , status});
     //   fetchDoctors(); // Refresh the doctor list
       alert('Doctor approved successfully.');
     } catch (error) {
@@ -147,7 +147,7 @@ const AdminDashboard: React.FC = () => {
                       )}
                       {doctor.status === 'approved' && (
                         <button onClick={() => removeDoctor(doctor._id)}>
-                          Remove
+                          Dis Approve
                         </button>
                       )}
                     </td>

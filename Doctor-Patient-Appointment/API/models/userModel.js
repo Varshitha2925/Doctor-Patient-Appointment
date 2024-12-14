@@ -23,6 +23,9 @@ const userSchema = mongoose.Schema(
     },
     zipcode:{
       type:String,
+    },
+    insuarance:{
+      type:String,
     }
 
   },

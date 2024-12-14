@@ -16,6 +16,7 @@ const LoginPage: React.FC = () => {
   const [email , setemail] = useState<string>('')
   const [password, setpassword] = useState<string>('')
   const [error, seterror] = useState<string>('')
+  const [user, setuser] = useState<string>('')
   const navigate = useNavigate();
 
   // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,16 +40,15 @@ const LoginPage: React.FC = () => {
           email,
           password,
         });
-        console.log("email",{email,password})
-        localStorage.setItem('userId', response.data.user._id);
-
-        console.log("response",response)
+        localStorage.setItem('userId', response.data.data._id);
+        setuser(response.data.data)
+        console.log("USER", user)
         navigate('/dashboard');
+        
         if (response.statusText === "OK") {
           console.log('Login successful');
            // Save token to local storage
-          console.log('userId', response.data.user._id)
-          navigate('/dashboard'); // Redirect to user/organizer dashboard
+          // navigate('/dashboard'); // Redirect to user/organizer dashboard
         } else {
           // setError(response.data.message || 'Login failed');
         }

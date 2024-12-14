@@ -52,7 +52,7 @@ const PDFDocument = require("pdfkit");
 //@access public
 
 const registerUser = asyncHandler(async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, city, state, zipcode, insuarance} = req.body;
   // console.log("REQ BODY" , req.body)
   if (!username || !email || !password) {
     res.status(400);
@@ -67,13 +67,16 @@ const registerUser = asyncHandler(async (req, res) => {
   // Hashed Password
   const hashedPassword = await bcrypt.hash(password, 10);
   console.log("Hashed Password", hashedPassword);
+
+  
   const user = await User.create({
     username,
     email,
     password: hashedPassword,
-    city, 
+    city,
     state,
-    zipcode
+    zipcode,
+    insuarance
   });
 
   console.log(`User Created ${user}`);
@@ -112,7 +115,7 @@ const loginUser = async (req, res) => {
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "10h" }
     );
-    res.status(200).json({user});
+    res.status(200).json({"data":user});
   } else {
     res.status(401);
     throw new Error("email or password is not valid");

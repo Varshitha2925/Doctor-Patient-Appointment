@@ -315,7 +315,6 @@ const postMedication = async (req, res) => {
       data: appointments.medication,
     });
     
-    // 644a376f95429b7b4b4348e5
   } catch (error) {
     console.log(error);
     res.status(500).send({
@@ -337,6 +336,8 @@ const timeSlotController = async (req, res) => {
       { $push: { time: time } },
     );
     if(timeSlot){
+      timeSlot.time = [...new Set(timeSlot.time)];
+      
       await timeSlot.save();
     }
     else{

@@ -10,7 +10,6 @@ const PatientDashboard: React.FC = () => {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const openBooking = () => setIsBookingOpen(true);
   const closeBooking = () => setIsBookingOpen(false);
-
   const logOut = () => {
     navigate('/')
   }
@@ -19,11 +18,11 @@ const PatientDashboard: React.FC = () => {
     <div className="patient-dashboard">
       <div className="dashboard-section">
         {/* Button to open Book Appointment pop-up */}
-                <button onClick={logOut} className="logout-btn">Log Out</button>
+        <button onClick={logOut} className="logout-btn">Log Out</button>
 
       <button onClick={openBooking} className="book-appointment-btn">Book an Appointment</button>
 
-      <div>Patient name: userInfo</div>
+      <div>Patient name: </div>
       
       {/* Book Appointment pop-up component */}
       <BookAppointment isOpen={isBookingOpen} onClose={closeBooking} />

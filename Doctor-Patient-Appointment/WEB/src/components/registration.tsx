@@ -41,6 +41,10 @@ const RegistrationPage: React.FC = () => {
   const [username, setusername] = useState<string>();
   const [email, setemail] = useState<string>();
   const [password, setpassword] = useState<string>();
+  const [city, setcity] = useState<string>();
+  const [state, setstate] = useState<string>();
+  const [zipcode, setzipcode] = useState<string>();
+  const [insuarance, setinsuarance] = useState<string>();
 
   const navigate = useNavigate();
 
@@ -61,7 +65,11 @@ const RegistrationPage: React.FC = () => {
       await axios.post(`http://localhost:3000/api/users/register`, {
         username,
         email,
-        password
+        password,
+        city,
+        state,
+        zipcode,
+        insuarance
       })
     console.log("Submitted Data: ", formData);
     navigate('/');
@@ -114,6 +122,51 @@ const RegistrationPage: React.FC = () => {
               name="password"
               value={password || ""}
               onChange={(e)=>{setpassword(e.target.value)}}
+              style={styles.input}
+              required
+            />
+            <label style={styles.label}>Confirm Password</label>
+            <input
+              type="password"
+              name="password"
+              value={password || ""}
+              onChange={(e)=>{setpassword(e.target.value)}}
+              style={styles.input}
+              required
+            />
+            <label style={styles.label}>City</label>
+            <input
+              type="text"
+              name="city"
+              value={city}
+              onChange={(e)=>{setcity(e.target.value)}}
+              style={styles.input}
+              required
+            />
+            <label style={styles.label}>State</label>
+            <input
+              type="text"
+              name="state"
+              value={state || ""}
+              onChange={(e)=>{setstate(e.target.value)}}
+              style={styles.input}
+              required
+            />
+            <label style={styles.label}>Zip Code</label>
+            <input
+              type="text"
+              name="zipcode"
+              value={zipcode || ""}
+              onChange={(e)=>{setzipcode(e.target.value)}}
+              style={styles.input}
+              required
+            />
+            <label style={styles.label}>Insuarance</label>
+            <input
+              type="text"
+              name="insuarance"
+              value={insuarance || ""}
+              onChange={(e)=>{setinsuarance(e.target.value)}}
               style={styles.input}
               required
             />
